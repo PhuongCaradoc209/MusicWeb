@@ -1,10 +1,10 @@
 import React from 'react'
-import Sidebar from './Sidebar'
 import MainBody from './MainBody/MainBody'
+import Sidebar from './Sidebar/Sidebar'
 
 function HomePage() {
     return (
-    <div className='flex bg-color_0'>
+    <div className='flex h-screen bg-color_0'>
         <Sidebar/>
         <MainBody/> 
     </div>
