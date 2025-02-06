@@ -13,6 +13,9 @@ export default {
         color_2: '#fbfd82',
         color_3: '#232323',
         color_4: '#f2f2f2',
+      },
+      fontFamily:{
+        title: ['Poppins', 'sans-serif'],
       }
     },
   },

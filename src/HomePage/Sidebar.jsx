@@ -3,7 +3,7 @@ import Sidebar_Option, { SidebarOptionItem } from './Sidebar_Option'
 
 function Sidebar() {
     return ( 
-    <div className='flex flex-col w-1/6 h-screen pl-2 pt-6
+    <div className='flex flex-col justify-center w-1/6 h-screen pl-2
                 bg-color_0 text-white gap-y-4'>
         {/* Sidebar */}
         <Sidebar_Option title='Library'>
