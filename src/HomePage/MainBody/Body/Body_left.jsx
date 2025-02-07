@@ -4,7 +4,7 @@ import Body_left_artist from './Body_left_artist'
 function Body_left() {
     return (
     <div className='bg-color_4 p-4 flex-[3] overflow-y-auto scrollbar-hidden'>
-        <div className='h-36 bg-color_1 rounded-2xl p-4'>
+        <div className='h-36 bg-color_1 rounded-2xl p-4 shadow-box'>
         </div>
         <div className='h-28 rounded-2xl mt-4 text-[10px]'>
             <div className='flex justify-between'>

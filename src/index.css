@@ -4,6 +4,28 @@
 @tailwind components;
 @tailwind utilities;
 
-body{
+body {
     font-family: 'Poppins', sans-serif;
+}
+
+.scrollbar-hidden::-webkit-scrollbar {
+    display: none;
+}
+
+@layer utilities {
+    .shadow-box {
+        -webkit-box-shadow: -24px 34px 40px -31px rgba(199,199,199,1);
+        -moz-box-shadow: -24px 34px 40px -31px rgba(199,199,199,1);
+        box-shadow: -24px 34px 40px -31px rgba(199,199,199,1);
+    }
+}
+
+.remain-mask-top {
+    mask-image: radial-gradient(circle at right bottom, transparent 20px, black 11px);
+    -webkit-mask-image: radial-gradient(circle at right bottom, transparent 20px, black 11px);
+}
+
+.remain-mask-bottom {
+    mask-image: radial-gradient(circle at right top, transparent 20px, black 11px);
+    -webkit-mask-image: radial-gradient(circle at right top, transparent 20px, black 11px);
 }

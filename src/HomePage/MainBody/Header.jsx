@@ -5,7 +5,7 @@ import { SlSettings } from 'react-icons/sl'
 
 function Header() {
     return (
-        <div className="relative flex items-center justify-between h-8 px-4 pt-8 pb-4">
+        <div className="relative flex items-center justify-between h-8 px-4 py-6">
         {/* Ô tìm kiếm */}
         <div className="flex items-center border rounded-2xl px-3 py-1 w-1/3 sm:w-1/2">
             <CiSearch size={15} className="text-gray-500 mr-2 cursor-pointer" />
