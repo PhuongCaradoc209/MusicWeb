@@ -8,18 +8,19 @@ function Sidebar() {
         {/* Sidebar */}
         <Sidebar_Option title='Library'>
             <ul className="flex flex-col gap-y-1">
-                <SidebarOptionItem>Browse</SidebarOptionItem>
-                <SidebarOptionItem>Songs</SidebarOptionItem>
-                <SidebarOptionItem>Albums</SidebarOptionItem>
-                <SidebarOptionItem>Artists</SidebarOptionItem>
-                <SidebarOptionItem>Genres</SidebarOptionItem>
+                <SidebarOptionItem to={"/browse"}>Browse</SidebarOptionItem>
+                <SidebarOptionItem to={"/songs"}>Songs</SidebarOptionItem>
+                <SidebarOptionItem to={"/albums"}>Albums</SidebarOptionItem>
+                <SidebarOptionItem to={"/artists"}>Artists</SidebarOptionItem>
+                <SidebarOptionItem to={"/genres"}>Genres</SidebarOptionItem>
             </ul>
         </Sidebar_Option>
+
         <Sidebar_Option title='My music'>
             <ul className="flex flex-col gap-y-1">
-                <SidebarOptionItem>Recently Played</SidebarOptionItem>
-                <SidebarOptionItem>Favorite Songs</SidebarOptionItem>
-                <SidebarOptionItem>Local File</SidebarOptionItem>
+                <SidebarOptionItem to={"/recently-played"}>Recently Played</SidebarOptionItem>
+                <SidebarOptionItem to={"/favorite-songs"}>Favorite Songs</SidebarOptionItem>
+                <SidebarOptionItem to={"/local-file"}>Local File</SidebarOptionItem>
             </ul>
         </Sidebar_Option>
         <div className="absolute top-0 left-[100%] w-[20px] h-[20px] bg-color_0 remain-mask-top">

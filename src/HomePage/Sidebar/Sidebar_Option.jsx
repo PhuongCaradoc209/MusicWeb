@@ -1,5 +1,6 @@
 // SidebarOption.js
 import React from "react";
+import { NavLink } from "react-router-dom";
 
 function SidebarOption({ title, children }) {
     return (
@@ -10,17 +11,19 @@ function SidebarOption({ title, children }) {
     );
 }
 
-export function SidebarOptionItem({ children }) {
+export function SidebarOptionItem({to, children }) {
     return (
-    <div
-        className="flex items-center justify-center 
-                w-fit
-                py-1.5 px-3 text-[8px] text-gray-300 
-                hover:bg-color_0_bold hover:text-color_2 
-                rounded-full cursor-pointer"
+    <NavLink
+        to={to}
+        className={({ isActive }) =>
+            `flex items-center justify-center 
+            w-fit py-1.5 px-3 text-[8px] 
+            rounded-full cursor-pointer transition-colors
+            ${isActive ? "bg-color_0_bold text-color_2" : "text-gray-300 hover:bg-color_0_bold hover:text-color_2"}`
+        }
     >
         {children}
-    </div>
+    </NavLink>
     );
 }
 

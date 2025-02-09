@@ -5,10 +5,10 @@ function Body_left_artist({image, name}) {
         <div className='flex flex-col items-center mt-2 h-24 w-16
                     rounded-lg
                     group cursor-pointer'>   
-            <div className='w-16 h-16 rounded-full overflow-hidden'>
+            <div className='w-16 aspect-square rounded-full overflow-hidden'>
                 <div 
                     className='w-full h-full bg-cover bg-center 
-                            transition-transform duration-300 group-hover:scale-110' 
+                            transition-transform duration-300 group-hover:scale-125' 
                     style={{ backgroundImage: `url(${image})` }}
                 />
             </div>
