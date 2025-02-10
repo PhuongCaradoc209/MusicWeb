@@ -29,6 +29,7 @@ function Body_right() {
                                             flex justify-center items-center
                                             p-3  rounded-full
                                             transition-transform duration-100 cursor-pointer active:scale-110
+                                            hover:border-gray-300 hover:text-gray-300
                                             '>
                                 <FaPlay size={12} className="" />
                             </div>
@@ -43,7 +44,17 @@ function Body_right() {
                         <span className='text-[10px] font-medium'>Title</span>
                         <span className='text-[8px] font-light text-gray-700'>Artist</span>
                     </div>
-                    <RiPlayListFill size={12} className='text-gray-500 cursor-pointer'/>
+                    <div className="relative group">
+                        <RiPlayListFill size={12} className="text-gray-500 cursor-pointer" />
+
+                        {/* Tooltip xuất hiện khi hover vào icon */}
+                        <div className="absolute top-[90%] left-[-105%] mt-1 
+                                        hidden group-hover:block bg-color_4 text-black text-[6px] px-1 py-0.5 
+                                        border border-black font-medium
+                                        whitespace-nowrap shadow-md">
+                            Playlist
+                        </div>
+                    </div>
                 </div>
             </div>
             <hr className="border-t-1 border-gray-400/60 w-full" />

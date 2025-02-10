@@ -7,7 +7,7 @@ function HomePage() {
     <div className='flex h-screen bg-color_0'>
         <Sidebar/>
         <MainBody/> 
-    </div>
+    </div>  
     )
 }
 
