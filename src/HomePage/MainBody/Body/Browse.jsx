@@ -1,7 +1,7 @@
 import React from 'react'
-import Card from './Card'
-import Browse_played from './Browse_played'
-import Browse_artist from './Browse_artist'
+import Card from '../Components/Card'
+import SongList from '../Components/SongList'
+import ArtistCard from '../Components/ArtistCard'
 
 function Browse() {
     return (
@@ -14,11 +14,11 @@ function Browse() {
                 <p className='text-[8px] text-gray-500 hover:text-black cursor-pointer'>See all</p>
             </div>
             <div className='flex gap-x-7'>
-                <Browse_artist image="https://solution.com.vn/upload_images/images/2021/12/logo-am-nhac/logo-am-nhac-2.jpg" name="Artist 1" />
-                <Browse_artist image="https://solution.com.vn/upload_images/images/2021/12/logo-am-nhac/logo-am-nhac-2.jpg" name="Artist 1" />
-                <Browse_artist image="https://solution.com.vn/upload_images/images/2021/12/logo-am-nhac/logo-am-nhac-2.jpg" name="Artist 1" />
-                <Browse_artist image="https://solution.com.vn/upload_images/images/2021/12/logo-am-nhac/logo-am-nhac-2.jpg" name="Artist 1" />
-                <Browse_artist image="https://solution.com.vn/upload_images/images/2021/12/logo-am-nhac/logo-am-nhac-2.jpg" name="Artist 1" />
+                <ArtistCard image="https://solution.com.vn/upload_images/images/2021/12/logo-am-nhac/logo-am-nhac-2.jpg" name="Artist 1" />
+                <ArtistCard image="https://solution.com.vn/upload_images/images/2021/12/logo-am-nhac/logo-am-nhac-2.jpg" name="Artist 1" />
+                <ArtistCard image="https://solution.com.vn/upload_images/images/2021/12/logo-am-nhac/logo-am-nhac-2.jpg" name="Artist 1" />
+                <ArtistCard image="https://solution.com.vn/upload_images/images/2021/12/logo-am-nhac/logo-am-nhac-2.jpg" name="Artist 1" />
+                <ArtistCard image="https://solution.com.vn/upload_images/images/2021/12/logo-am-nhac/logo-am-nhac-2.jpg" name="Artist 1" />
             </div>
         </div>
         <div className='h-28 rounded-2xl mt-4 text-[10px]'>
@@ -27,10 +27,10 @@ function Browse() {
                 <p className='text-[8px] text-gray-500 hover:text-black cursor-pointer'>See all</p>
             </div>
             <div className='flex flex-col gap-y-2 overflow-y-auto scrollbar-hidden max-h-24'>
-                <Browse_played srcImage={"https://solution.com.vn/upload_images/images/2021/12/logo-am-nhac/logo-am-nhac-2.jpg"} titleSong="Song 1" artist="Artist 1" duration="3:45" />
-                <Browse_played srcImage={"https://solution.com.vn/upload_images/images/2021/12/logo-am-nhac/logo-am-nhac-2.jpg"} titleSong="Song 2" artist="Artist 2" duration="3:45" />
-                <Browse_played srcImage={"https://solution.com.vn/upload_images/images/2021/12/logo-am-nhac/logo-am-nhac-2.jpg"} titleSong="Song 3" artist="Artist 3" duration="3:45" />
-                <Browse_played srcImage={"https://solution.com.vn/upload_images/images/2021/12/logo-am-nhac/logo-am-nhac-2.jpg"} titleSong="Song 4" artist="Artist 4" duration="3:45" /> 
+                <SongList srcImage={"https://solution.com.vn/upload_images/images/2021/12/logo-am-nhac/logo-am-nhac-2.jpg"} titleSong="Song 1" artist="Artist 1" duration="3:45" />
+                <SongList srcImage={"https://solution.com.vn/upload_images/images/2021/12/logo-am-nhac/logo-am-nhac-2.jpg"} titleSong="Song 2" artist="Artist 2" duration="3:45" />
+                <SongList srcImage={"https://solution.com.vn/upload_images/images/2021/12/logo-am-nhac/logo-am-nhac-2.jpg"} titleSong="Song 3" artist="Artist 3" duration="3:45" />
+                <SongList srcImage={"https://solution.com.vn/upload_images/images/2021/12/logo-am-nhac/logo-am-nhac-2.jpg"} titleSong="Song 4" artist="Artist 4" duration="3:45" /> 
             </div>
         </div>
         <div className='h-fit rounded-2xl mt-4 text-[10px]'>

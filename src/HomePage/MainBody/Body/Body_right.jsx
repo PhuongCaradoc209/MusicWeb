@@ -3,6 +3,7 @@ import { BsSoundwave } from 'react-icons/bs'
 import { FaPlay } from 'react-icons/fa'
 import { IoPlaySkipBack, IoPlaySkipForward } from 'react-icons/io5'
 import { RiPlayListFill } from 'react-icons/ri'
+import ToolTip from '../Components/ToolTip'
 
 function Body_right() {
     return (
@@ -48,12 +49,7 @@ function Body_right() {
                         <RiPlayListFill size={12} className="text-gray-500 cursor-pointer" />
 
                         {/* Tooltip xuất hiện khi hover vào icon */}
-                        <div className="absolute top-[90%] left-[-105%] mt-1 
-                                        hidden group-hover:block bg-color_4 text-black text-[6px] px-1 py-0.5 
-                                        border border-black font-medium
-                                        whitespace-nowrap shadow-md">
-                            Playlist
-                        </div>
+                        <ToolTip text={"Playlist"} top={"130%"} left={"-105%"}/>
                     </div>
                 </div>
             </div>

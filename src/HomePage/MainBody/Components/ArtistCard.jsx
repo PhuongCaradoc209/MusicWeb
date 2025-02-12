@@ -1,6 +1,6 @@
 import React from 'react'
 
-function Browse_artist({image, name}) {
+function ArtistCard({image, name}) {
     return (
         <div className='flex flex-col items-center mt-2 h-24 w-16
                     rounded-lg
@@ -17,4 +17,4 @@ function Browse_artist({image, name}) {
     );    
 }
 
-export default Browse_artist
+export default ArtistCard

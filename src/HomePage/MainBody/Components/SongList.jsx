@@ -1,7 +1,7 @@
 import React from 'react'
 import { FaPlus } from 'react-icons/fa'
 
-function Browse_played({srcImage, titleSong, artist, duration}) {
+function SongList({srcImage, titleSong, artist, duration}) {
     return (
     <div className="flex items-center justify-between
                 w-full py-2 border-b h-10px-4 
@@ -20,4 +20,4 @@ function Browse_played({srcImage, titleSong, artist, duration}) {
     )
 }
 
-export default Browse_played
+export default SongList
