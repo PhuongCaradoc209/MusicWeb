@@ -4,7 +4,7 @@ import Sidebar from './Sidebar/Sidebar'
 
 function HomePage() {
     return (
-    <div className='flex h-screen bg-color_0'>
+    <div className='flex h-[100dvh] bg-color_0 overflow-hidden'>
         <Sidebar/>
         <MainBody/> 
     </div>  
