@@ -3,7 +3,7 @@ import SongCard from '../Components/SongCard'
 
 function Songs() {
     return (
-    <div className='p-4 flex-[3] overflow-y-auto scrollbar-hidden'>
+    <div className='p-4 flex-[5] overflow-y-auto scrollbar-hidden'>
         {
         // <div className="relative h-48 flex items-center justify-center overflow-hidden">
         //     <div className="-mt-48

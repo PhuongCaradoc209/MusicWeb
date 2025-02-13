@@ -7,7 +7,7 @@ import ToolTip from '../Components/ToolTip'
 
 function Body_right() {
     return (
-    <div className='py-4 pr-4 flex-[1]'> 
+    <div className='py-4 pr-4 flex-[2]'> 
         <div className='h-full w-auto p-2 gap-y-2
                         bg-gray-200 rounded-xl
                         flex flex-col justify-start items-center

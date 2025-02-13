@@ -5,7 +5,7 @@ import ArtistCard from '../Components/ArtistCard'
 
 function Browse() {
     return (
-    <div className='bg-color_4 p-4 flex-[3] overflow-y-auto scrollbar-hidden'>
+    <div className='bg-color_4 p-4 flex-[5] overflow-y-auto scrollbar-hidden'>
         <div className='h-36 bg-color_1 rounded-2xl p-4 shadow-box'>
         </div>
         <div className='h-28 rounded-2xl mt-4 text-[10px]'>
@@ -13,7 +13,7 @@ function Browse() {
                 <p className='font-medium'>Popular artist</p>
                 <p className='text-[8px] text-gray-500 hover:text-black cursor-pointer'>See all</p>
             </div>
-            <div className='flex gap-x-7'>
+            <div className='flex gap-x-5'>
                 <ArtistCard image="https://solution.com.vn/upload_images/images/2021/12/logo-am-nhac/logo-am-nhac-2.jpg" name="Artist 1" />
                 <ArtistCard image="https://solution.com.vn/upload_images/images/2021/12/logo-am-nhac/logo-am-nhac-2.jpg" name="Artist 1" />
                 <ArtistCard image="https://solution.com.vn/upload_images/images/2021/12/logo-am-nhac/logo-am-nhac-2.jpg" name="Artist 1" />

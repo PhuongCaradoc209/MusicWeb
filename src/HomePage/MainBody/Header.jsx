@@ -27,7 +27,7 @@ function Header() {
                     size={12} 
                     className="cursor-pointer hover:text-gray-900 transition duration-200" 
                 />
-                <ToolTip text={"Notification"} />
+                <ToolTip text={"Notification"} left='50%'/>
             </div>
             
             {/* Avatar */}
