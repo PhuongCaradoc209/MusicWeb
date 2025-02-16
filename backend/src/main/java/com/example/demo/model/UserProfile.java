@@ -2,6 +2,7 @@ package com.example.demo.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -19,7 +20,7 @@ public class UserProfile {
     @JoinColumn(name = "user_id")
     private User user;
 
-    private String fullName;
+    private String userName;
     private LocalDateTime birthDate;
     private String avatarUrl;
     private String country;

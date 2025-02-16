@@ -2,7 +2,9 @@ package com.example.demo.mapper;
 
 import com.example.demo.dto.UserDTO;
 import com.example.demo.model.User;
+import org.springframework.stereotype.Component;
 
+@Component
 public class UserMapper {
     public static UserDTO toDTO(User user) {
         if (user == null) {
