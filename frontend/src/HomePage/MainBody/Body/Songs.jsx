@@ -3,7 +3,9 @@ import SongCard from '../Components/SongCard'
 
 function Songs() {
     return (
-    <div className='p-4 flex-[5] overflow-y-auto scrollbar-hidden'>
+    <div className='bg-color_body mt-4 p-4 col-span-5 
+                overflow-y-auto scrollbar-hidden text-white
+                space-y-4'>
         {
         // <div className="relative h-48 flex items-center justify-center overflow-hidden">
         //     <div className="-mt-48
@@ -18,12 +20,14 @@ function Songs() {
         //     </div>
         // </div>
         }
-        <div className='h-36 rounded-2xl text-[10px]'>
-            <div className='flex justify-between'>
-                <p className='font-medium'>New release</p>
-                <p className='text-[8px] text-gray-500 hover:text-black cursor-pointer'>See all</p>
+        <div className='h-fit rounded-2xl px-4 py-6 bg-color_body space-y-6 text-lg'>
+            <div className='flex justify-between items-center'>
+                <p className='font-medium text-white'>New Release</p>
+                <p className='text-gray-400 hover:text-white cursor-pointer text-sm transition duration-200'>
+                    See all
+                </p>
             </div>
-            <div className='flex h-fit pt-3 gap-x-3'>
+            <div className='flex h-fit pt-3 space-x-6'>
                 <SongCard image={"https://solution.com.vn/upload_images/images/2021/12/logo-am-nhac/logo-am-nhac-2.jpg"} title={"Song 1"} artist={"Artist 1"} duration={"3:00"}/>
                 <SongCard image={"https://solution.com.vn/upload_images/images/2021/12/logo-am-nhac/logo-am-nhac-2.jpg"} title={"Song 1"} artist={"Artist 1"} duration={"3:00"}/>
                 <SongCard image={"https://solution.com.vn/upload_images/images/2021/12/logo-am-nhac/logo-am-nhac-2.jpg"} title={"Song 1"} artist={"Artist 1"} duration={"3:00"}/>
