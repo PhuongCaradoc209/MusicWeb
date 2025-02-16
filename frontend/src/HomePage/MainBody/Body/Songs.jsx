@@ -1,5 +1,20 @@
 import React from 'react'
 import SongCard from '../Components/SongCard'
+import ScrollableList from '../Components/ScrollableList';
+import Card from '../Components/Card';
+
+const songItems = [
+    { srcImage: "https://solution.com.vn/upload_images/images/2021/12/logo-am-nhac/logo-am-nhac-2.jpg", title: "Song 1", artist:"Artist 1", duration:"3:00" },
+    { srcImage: "https://solution.com.vn/upload_images/images/2021/12/logo-am-nhac/logo-am-nhac-2.jpg", title: "Song 1", artist:"Artist 1", duration:"3:00" },
+    { srcImage: "https://solution.com.vn/upload_images/images/2021/12/logo-am-nhac/logo-am-nhac-2.jpg", title: "Song 1", artist:"Artist 1", duration:"3:00" },
+    { srcImage: "https://solution.com.vn/upload_images/images/2021/12/logo-am-nhac/logo-am-nhac-2.jpg", title: "Song 1", artist:"Artist 1", duration:"3:00" },
+    { srcImage: "https://solution.com.vn/upload_images/images/2021/12/logo-am-nhac/logo-am-nhac-2.jpg", title: "Song 1", artist:"Artist 1", duration:"3:00" },
+    { srcImage: "https://solution.com.vn/upload_images/images/2021/12/logo-am-nhac/logo-am-nhac-2.jpg", title: "Song 1", artist:"Artist 1", duration:"3:00" },
+    { srcImage: "https://solution.com.vn/upload_images/images/2021/12/logo-am-nhac/logo-am-nhac-2.jpg", title: "Song 1", artist:"Artist 1", duration:"3:00" },
+    { srcImage: "https://solution.com.vn/upload_images/images/2021/12/logo-am-nhac/logo-am-nhac-2.jpg", title: "Song 1", artist:"Artist 1", duration:"3:00" },
+    { srcImage: "https://solution.com.vn/upload_images/images/2021/12/logo-am-nhac/logo-am-nhac-2.jpg", title: "Song 1", artist:"Artist 1", duration:"3:00" },
+    { srcImage: "https://solution.com.vn/upload_images/images/2021/12/logo-am-nhac/logo-am-nhac-2.jpg", title: "Song 1", artist:"Artist 1", duration:"3:00" }
+];
 
 function Songs() {
     return (
@@ -27,12 +42,7 @@ function Songs() {
                     See all
                 </p>
             </div>
-            <div className='flex h-fit pt-3 space-x-6'>
-                <SongCard image={"https://solution.com.vn/upload_images/images/2021/12/logo-am-nhac/logo-am-nhac-2.jpg"} title={"Song 1"} artist={"Artist 1"} duration={"3:00"}/>
-                <SongCard image={"https://solution.com.vn/upload_images/images/2021/12/logo-am-nhac/logo-am-nhac-2.jpg"} title={"Song 1"} artist={"Artist 1"} duration={"3:00"}/>
-                <SongCard image={"https://solution.com.vn/upload_images/images/2021/12/logo-am-nhac/logo-am-nhac-2.jpg"} title={"Song 1"} artist={"Artist 1"} duration={"3:00"}/>
-                <SongCard image={"https://solution.com.vn/upload_images/images/2021/12/logo-am-nhac/logo-am-nhac-2.jpg"} title={"Song 1"} artist={"Artist 1"} duration={"3:00"}/>
-            </div>
+            <ScrollableList items={songItems} CardComponent={SongCard} />
         </div>
     </div>
     )
