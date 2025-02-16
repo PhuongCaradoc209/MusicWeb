@@ -1,17 +1,25 @@
 import React from "react";
 
-const ToolTip = ({ text, top = "120%", left = "105%", fontSize = "6px", paddingX = "0.25rem", paddingY = "0.25rem" }) => {
+const ToolTip = ({ 
+    text, 
+    top = "150%", 
+    left = "50%", 
+    fontSize = "14px", 
+    paddingX = "0.5rem", 
+    paddingY = "0.25rem" 
+}) => {
     return (
         <div 
-            className={`absolute hidden group-hover:block 
-                        bg-color_4 text-black border border-black font-medium
-                        shadow-md z-10`}
+            className="absolute hidden group-hover:block 
+                        bg-gray-600 text-white border border-white font-medium
+                        shadow-lg z-10 px-4 py-2 text-xs
+                        w-fit text-nowrap   
+                        transition-opacity duration-200"
             style={{ 
                 top, 
                 left, 
                 fontSize, 
-                padding: `${paddingY} ${paddingX}`,
-                lineHeight: "1"
+                transform: "translateX(-50%)" // Căn tooltip vào giữa
             }}
         >
             {text}
