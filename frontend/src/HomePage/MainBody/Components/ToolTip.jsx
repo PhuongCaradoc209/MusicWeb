@@ -12,7 +12,7 @@ const ToolTip = ({
         <div 
             className="absolute hidden group-hover:block 
                         bg-gray-600 text-white border border-white font-medium
-                        shadow-lg z-10 px-4 py-2 text-xs
+                        shadow-lg z-50 px-4 py-2 text-sm
                         w-fit text-nowrap   
                         transition-opacity duration-200"
             style={{ 
