@@ -27,8 +27,8 @@ function Sidebar() {
         </div>
 
         {/* Remain mask elements */}
-        <div className="absolute top-0 left-[100%] w-[20px] h-[20px] bg-black remain-mask-top"></div>
-        <div className="absolute bottom-0 left-[100%] w-[20px] h-[20px] bg-black remain-mask-bottom"></div>
+        <div className="absolute top-0 left-[100%] w-[40px] h-[40px] bg-black remain-mask-top"></div>
+        <div className="absolute bottom-0 left-[100%] w-[40px] h-[40px] bg-black remain-mask-bottom"></div>
         </div>
     )
 }

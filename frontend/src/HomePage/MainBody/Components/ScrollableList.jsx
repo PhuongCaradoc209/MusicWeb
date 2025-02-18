@@ -40,7 +40,6 @@ const ScrollableList = ({ items, CardComponent }) => {
 
     return (
         <div className="relative w-full">
-            {/* Nút Left chỉ hiển thị khi có thể cuộn trái */}
             {canScrollLeft && (
                 <button 
                     className="absolute left-4 top-1/2 -translate-y-1/2 bg-gray-700 text-white p-2 rounded-full shadow-md hover:bg-gray-800 z-10"
@@ -62,7 +61,6 @@ const ScrollableList = ({ items, CardComponent }) => {
                 ))}
             </div>
 
-            {/* Nút Right chỉ hiển thị khi có thể cuộn phải */}
             {canScrollRight && (
                 <button 
                     className="absolute right-4 top-1/2 -translate-y-1/2 bg-gray-700 text-white p-2 rounded-full shadow-md hover:bg-gray-800 z-10"

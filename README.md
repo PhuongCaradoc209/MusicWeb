@@ -37,3 +37,9 @@ Welcome to **Music Web**, a full-stack music application built with **Spring Boo
 ```sh
 cd backend
 ./mvnw spring-boot:run
+
+### 🔹 Frontend Setup  
+
+```sh
+cd frontend
+npm run dev
