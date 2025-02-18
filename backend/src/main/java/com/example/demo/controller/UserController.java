@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users")
@@ -22,7 +23,6 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<UserDTO> registerUser(@RequestBody User user) {
         try {
-            // Gọi service để đăng ký người dùng
             UserDTO userDTO = userService.registerUser(user);
             return ResponseEntity.ok(userDTO);
         } catch (ResponseStatusException ex) {
@@ -35,11 +35,15 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<UserDTO> loginUser(@RequestBody User user) {
         try {
-            return ResponseEntity.ok(userService.loginUser(user).orElseThrow(() -> new RuntimeException("Login failed")));
-        } catch (RuntimeException ex) {
-            throw new RuntimeException("Error during login: " + ex.getMessage());
+            Optional<UserDTO> userDTO = userService.loginUser(user);
+            return userDTO.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null));
+        } catch (ResponseStatusException ex) {
+            throw ex;
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<UserDTO> getUserById(@PathVariable long id) {

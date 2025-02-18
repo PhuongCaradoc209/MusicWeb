@@ -42,7 +42,7 @@ public class UserService implements IUserService {
     public Optional<UserDTO> loginUser(User user) {
         Optional<User> existedUser = userRepository.findByEmail(user.getEmail());
         if (existedUser.isEmpty()||!PasswordUtil.matchPassword(user.getPassword(), existedUser.get().getPassword())) {
-            throw new RuntimeException("Invalid email or password");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid email or password");
         }
 
         return Optional.of(UserMapper.toDTO(existedUser.get()));
