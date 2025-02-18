@@ -1,13 +1,16 @@
 package com.example.demo.service.user;
 
 import com.example.demo.dto.UserDTO;
+import com.example.demo.enums.UserRole;
 import com.example.demo.mapper.UserMapper;
 import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.util.PasswordUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,13 +26,14 @@ public class UserService implements IUserService {
     public UserDTO registerUser(User user) {
         //CHECK EMAIL
         if (userRepository.existsByEmail(user.getEmail())) {
-            throw new RuntimeException("Email already exists");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email already exists");
         }
         //CHECK PASSWORD
         if (!PasswordUtil.isStrongPassword(user.getPassword())) {
-            throw new RuntimeException("Weak password. Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number, and one special character.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Weak password. Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number, and one special character.");
         }
         user.setPassword(PasswordUtil.hashPassword(user.getPassword()));
+        user.setRole(UserRole.USER);
         User savedUser = userRepository.save(user);
         return UserMapper.toDTO(savedUser);
     }

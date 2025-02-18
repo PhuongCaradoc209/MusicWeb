@@ -3,8 +3,10 @@ package com.example.demo.controller;
 import com.example.demo.dto.UserDTO;
 import com.example.demo.model.User;
 import com.example.demo.service.user.UserService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -20,9 +22,13 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<UserDTO> registerUser(@RequestBody User user) {
         try {
-            return ResponseEntity.ok(userService.registerUser(user));
-        } catch (RuntimeException ex) {
-            throw new RuntimeException("Error during registration: " + ex.getMessage());
+            // Gọi service để đăng ký người dùng
+            UserDTO userDTO = userService.registerUser(user);
+            return ResponseEntity.ok(userDTO);
+        } catch (ResponseStatusException ex) {
+            throw ex;
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 

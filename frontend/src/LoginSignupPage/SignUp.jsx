@@ -1,19 +1,32 @@
-import React, { useState } from 'react'
-import { FcGoogle } from 'react-icons/fc'
-import axios from 'axios'
+import React, { useState } from 'react';
+import { FcGoogle } from 'react-icons/fc';
+import axios from 'axios';
 
 function SignUp() {
     const [step, setStep] = useState(1);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
 
     const handleSignUp = async () => {
         try {
-            const user = { email, password }; 
-            const response = await axios.post('http://localhost:8080/api/users/register', user); // Gửi request tới backend
+            const user = { email, password };
+            const response = await axios.post('http://localhost:8080/api/users/register', user);
             console.log('User registered:', response.data);
+
+            setSuccessMessage('Sign up successful! Please go to log in.');
+            setErrorMessage('');
         } catch (error) {
             console.error('Error registering user:', error);
+
+            if (error.response && error.response.data) {
+                setErrorMessage(error.response.data.message || 'An error occurred');
+            } else {
+                setErrorMessage('An unexpected error occurred.');
+            }
+
+            setSuccessMessage('');
         }
     };
 
@@ -24,51 +37,59 @@ function SignUp() {
                     Sign up to start listening
                 </h2>
 
-                {/* Form */}
                 <form className="flex flex-col flex-grow">
                     {step === 1 ? (
-                        // Bước 1: Nhập email
                         <div className="flex flex-col mb-4 text-sm">
                             <label className="text-gray-600 mb-1 font-medium">Email</label>
                             <input
                                 type="email"
                                 placeholder="Email"
                                 value={email}
-                                onChange={(e) => setEmail(e.target.value)} // Lưu giá trị email
+                                onChange={(e) => setEmail(e.target.value)}
                                 className="border border-gray-300 rounded-md px-3 py-2 font-sans focus:outline-none focus:ring-2 focus:ring-blue-400"
                             />
                         </div>
                     ) : (
-                        // Bước 2: Nhập password
                         <div className="flex flex-col mb-4 text-sm">
                             <label className="text-gray-600 mb-1 font-medium">Password</label>
                             <input
                                 type="password"
                                 placeholder="Password"
                                 value={password}
-                                onChange={(e) => setPassword(e.target.value)} // Lưu giá trị password
+                                onChange={(e) => setPassword(e.target.value)}
                                 className="border border-gray-300 rounded-md px-3 py-2 font-sans focus:outline-none focus:ring-2 focus:ring-blue-400"
                             />
                         </div>
                     )}
 
-                    {/* Button */}
+                    {successMessage && <div className="text-green-500 text-sm mb-4">{successMessage}</div>}
+                    {errorMessage && <div className="text-red-500 text-sm mb-4">{errorMessage}</div>}
+
                     {step === 1 ? (
                         <button
                             type="button"
-                            onClick={() => setStep(2)} 
+                            onClick={() => setStep(2)}
                             className="bg-color_1 text-white font-semibold py-3 w-full rounded-3xl hover:scale-105 transition duration-300 text-sm mt-2"
                         >
                             Next
                         </button>
                     ) : (
-                        <button
-                            type="button"
-                            onClick={handleSignUp} // Gọi hàm gửi request khi click Sign Up
-                            className="bg-color_1 text-white font-semibold py-3 w-full rounded-3xl hover:scale-105 transition duration-300 text-sm mt-2"
-                        >
-                            Sign Up
-                        </button>
+                        <>
+                            <button
+                                type="button"
+                                onClick={() => setStep(1)}  // Button to go back to email step
+                                className="bg-gray-300 text-black font-semibold py-3 w-full rounded-3xl hover:scale-105 transition duration-300 text-sm mt-2"
+                            >
+                                Back
+                            </button>
+                            <button
+                                type="button"
+                                onClick={handleSignUp}
+                                className="bg-color_1 text-white font-semibold py-3 w-full rounded-3xl hover:scale-105 transition duration-300 text-sm mt-2"
+                            >
+                                Sign Up
+                            </button>
+                        </>
                     )}
                 </form>
 
