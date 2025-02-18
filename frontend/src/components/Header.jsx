@@ -1,9 +1,6 @@
 import React from 'react'
 import { CiSearch } from 'react-icons/ci'
-import { IoNotificationsOutline } from 'react-icons/io5'
-import ToolTip from './Components/ToolTip'
-import AvatarMenu from './Components/AvatarMenu'
-import SignUpLogInButton from './Components/SignUpLogInButton'
+import SignUpLogInButton from '../components/SignUpLogInButton'
 
 function Header() {
     return (

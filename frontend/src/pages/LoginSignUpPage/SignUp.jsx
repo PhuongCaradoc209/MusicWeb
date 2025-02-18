@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 import { FcGoogle } from 'react-icons/fc';
 import axios from 'axios';
 

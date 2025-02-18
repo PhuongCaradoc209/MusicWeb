@@ -3,7 +3,7 @@ import { BsSoundwave } from 'react-icons/bs'
 import { FaPlay } from 'react-icons/fa'
 import { IoPlaySkipBack, IoPlaySkipForward } from 'react-icons/io5'
 import { RiPlayListFill } from 'react-icons/ri'
-import ToolTip from '../Components/ToolTip'
+import ToolTip from '../../components/ToolTip'
 
 function Body_right() {
     return (

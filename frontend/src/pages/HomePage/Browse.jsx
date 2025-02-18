@@ -1,8 +1,8 @@
-import React from 'react'
-import Card from '../Components/Card'
-import SongList from '../Components/SongList'
-import ArtistCard from '../Components/ArtistCard'
-import ScrollableList from '../Components/ScrollableList';
+import React from 'react';
+import SongList from '../../components/SongList'
+import ArtistCard from '../../components/ArtistCard'
+import ScrollableList from '../../components/ScrollableList';
+import Card from '../../components/Card';
 
 const albumItems = [
     { srcImage: "https://solution.com.vn/upload_images/images/2021/12/logo-am-nhac/logo-am-nhac-2.jpg", title: "Album 1", artist: "Artist 1" },
