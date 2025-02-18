@@ -3,6 +3,7 @@ import { CiSearch } from 'react-icons/ci'
 import { IoNotificationsOutline } from 'react-icons/io5'
 import ToolTip from './Components/ToolTip'
 import AvatarMenu from './Components/AvatarMenu'
+import SignUpLogInButton from './Components/SignUpLogInButton'
 
 function Header() {
     return (
@@ -16,16 +17,19 @@ function Header() {
             />
         </div>
     
-        <div className="flex items-center gap-x-6 text-2xl text-gray-400">
-            <div className="relative group">
-                <IoNotificationsOutline 
-                    size={24} 
-                    className="cursor-pointer hover:text-white transition duration-200" 
-                />
-                <ToolTip text={"Notification"} left='50%'/>
-            </div>
+        <div className="flex items-center gap-x-2 text-2xl text-gray-400">
+            {
+            //     <div className="relative group">
+            //     <IoNotificationsOutline 
+            //         size={24} 
+            //         className="cursor-pointer hover:text-white transition duration-200" 
+            //     />
+            //     <ToolTip text={"Notification"} left='50%'/>
+            // </div>
             
-            <AvatarMenu/>
+            // <AvatarMenu/>
+            }
+            <SignUpLogInButton/>
         </div>
     </div>    
     )

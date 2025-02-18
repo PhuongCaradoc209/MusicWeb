@@ -3,8 +3,8 @@ import { FcGoogle } from "react-icons/fc";
 
 function Login() {
     return (
-        <div className="flex items-center justify-center min-h-screen w-full
-                        bg-gradient-to-b from-color_2 to-color_1 px-4">
+        <div className="flex items-center justify-center min-h-screen w-full px-4
+                        animate-bgAnimation">
             <div className="rounded-xl w-full max-w-md min-h-[550px] border bg-white 
                             shadow-lg flex flex-col px-8 md:px-20 py-10">
                 <h2 className="text-3xl font-bold text-gray-700 text-center mb-6">

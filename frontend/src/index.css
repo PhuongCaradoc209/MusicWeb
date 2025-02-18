@@ -21,11 +21,29 @@ body {
 }
 
 .remain-mask-top {
-    mask-image: radial-gradient(circle at right bottom, transparent 20px, black 11px);
-    -webkit-mask-image: radial-gradient(circle at right bottom, transparent 20px, black 11px);
+    mask-image: radial-gradient(circle at right bottom, transparent 40px, black 11px);
+    -webkit-mask-image: radial-gradient(circle at right bottom, transparent 40px, black 11px);
 }
 
 .remain-mask-bottom {
-    mask-image: radial-gradient(circle at right top, transparent 20px, black 11px);
-    -webkit-mask-image: radial-gradient(circle at right top, transparent 20px, black 11px);
+    mask-image: radial-gradient(circle at right top, transparent 40px, black 11px);
+    -webkit-mask-image: radial-gradient(circle at right top, transparent 40px, black 11px);
+}
+
+@keyframes bgAnimation {
+    0% {
+        background-position: 0% 0%;
+    }
+    50% {
+        background-position: 100% 100%;
+    }
+    100% {
+        background-position: 0% 0%;
+    }
+    }
+    
+.animate-bgAnimation {
+    background: linear-gradient(to bottom, #2940D3, #f900007e);
+    background-size: 150% 150%;
+    animation: bgAnimation 4s infinite alternate ease-in-out;
 }
