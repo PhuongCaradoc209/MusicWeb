@@ -3,6 +3,9 @@ package com.example.demo.service.song;
 import com.example.demo.model.WeeklySong;
 import com.example.demo.repository.WeeklySongsRepository;
 import com.example.demo.service.spotify.SpotifyService;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
@@ -12,12 +15,15 @@ import java.util.stream.Collectors;
 public class WeeklySongsService {
     private final WeeklySongsRepository weeklySongsRepository;
     private final SpotifyService spotifyService;
+    private final RedisTemplate<String, Object> redisTemplate;
 
-    public WeeklySongsService(WeeklySongsRepository weeklySongsRepository, SpotifyService spotifyService) {
+    public WeeklySongsService(WeeklySongsRepository weeklySongsRepository, SpotifyService spotifyService, RedisTemplate<String, Object> redisTemplate) {
         this.weeklySongsRepository = weeklySongsRepository;
         this.spotifyService = spotifyService;
+        this.redisTemplate = redisTemplate;
     }
 
+    @Cacheable(value = "top10songs", key = "'weeklyTop10'", unless = "#result == null || #result.isEmpty()")
     public List<Map<String, String>> getTop10SongsWithDetails() {
         return weeklySongsRepository.findTop10ByOrderByRankAsc()
                 .stream()

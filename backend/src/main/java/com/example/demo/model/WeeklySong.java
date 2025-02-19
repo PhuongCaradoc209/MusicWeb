@@ -1,11 +1,13 @@
 package com.example.demo.model;
 
+import com.example.demo.cache.WeeklySongsCacheListener;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
+@EntityListeners(WeeklySongsCacheListener.class)
 @Table(name = "weeklysongs")
 @Data
 @AllArgsConstructor
