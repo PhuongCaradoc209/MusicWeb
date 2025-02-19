@@ -1,19 +1,5 @@
 import React from 'react'
-import SongCard from '../../components/SongCard'
-import ScrollableList from '../../components/ScrollableList';
-
-const songItems = [
-    { srcImage: "https://solution.com.vn/upload_images/images/2021/12/logo-am-nhac/logo-am-nhac-2.jpg", title: "Song 1", artist:"Artist 1", duration:"3:00" },
-    { srcImage: "https://solution.com.vn/upload_images/images/2021/12/logo-am-nhac/logo-am-nhac-2.jpg", title: "Song 1", artist:"Artist 1", duration:"3:00" },
-    { srcImage: "https://solution.com.vn/upload_images/images/2021/12/logo-am-nhac/logo-am-nhac-2.jpg", title: "Song 1", artist:"Artist 1", duration:"3:00" },
-    { srcImage: "https://solution.com.vn/upload_images/images/2021/12/logo-am-nhac/logo-am-nhac-2.jpg", title: "Song 1", artist:"Artist 1", duration:"3:00" },
-    { srcImage: "https://solution.com.vn/upload_images/images/2021/12/logo-am-nhac/logo-am-nhac-2.jpg", title: "Song 1", artist:"Artist 1", duration:"3:00" },
-    { srcImage: "https://solution.com.vn/upload_images/images/2021/12/logo-am-nhac/logo-am-nhac-2.jpg", title: "Song 1", artist:"Artist 1", duration:"3:00" },
-    { srcImage: "https://solution.com.vn/upload_images/images/2021/12/logo-am-nhac/logo-am-nhac-2.jpg", title: "Song 1", artist:"Artist 1", duration:"3:00" },
-    { srcImage: "https://solution.com.vn/upload_images/images/2021/12/logo-am-nhac/logo-am-nhac-2.jpg", title: "Song 1", artist:"Artist 1", duration:"3:00" },
-    { srcImage: "https://solution.com.vn/upload_images/images/2021/12/logo-am-nhac/logo-am-nhac-2.jpg", title: "Song 1", artist:"Artist 1", duration:"3:00" },
-    { srcImage: "https://solution.com.vn/upload_images/images/2021/12/logo-am-nhac/logo-am-nhac-2.jpg", title: "Song 1", artist:"Artist 1", duration:"3:00" }
-];
+import TopSongs from '../../components/TopSongs'
 
 function Songs() {
     return (
@@ -41,7 +27,7 @@ function Songs() {
                     See all
                 </p>
             </div>
-            <ScrollableList items={songItems} CardComponent={SongCard} />
+            <TopSongs/>
         </div>
     </div>
     )
