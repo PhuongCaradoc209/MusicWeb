@@ -3,9 +3,9 @@ import TopSongs from '../../components/TopSongs'
 
 function Songs() {
     return (
-    <div className='bg-color_body mt-4 p-4 col-span-5 
+    <div className='bg-color_body mt-4 p-4 col-span-5
                 overflow-y-auto scrollbar-hidden text-white
-                space-y-4'>
+                space-y-2'>
         {
         // <div className="relative h-48 flex items-center justify-center overflow-hidden">
         //     <div className="-mt-48
@@ -20,15 +20,8 @@ function Songs() {
         //     </div>
         // </div>
         }
-        <div className='h-fit rounded-2xl px-4 py-6 bg-color_body space-y-6 text-lg'>
-            <div className='flex justify-between items-center'>
-                <p className='font-medium text-white'>New Release</p>
-                <p className='text-gray-400 hover:text-white cursor-pointer text-sm transition duration-200'>
-                    See all
-                </p>
-            </div>
-            <TopSongs/>
-        </div>
+        <div className='h-64 bg-color_1 rounded-3xl mx-4'></div>
+        <TopSongs/>
     </div>
     )
 }

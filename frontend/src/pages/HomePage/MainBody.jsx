@@ -5,7 +5,7 @@ import BodyWrapper from './BodyWrapper'
 function MainBody() {
     return (
     <div>
-        <div className="flex flex-col flex-1 h-screen bg-color_body shadow-lg shadow-gray-700/90">
+        <div className="flex flex-col h-screen bg-color_body shadow-lg shadow-gray-700/90">
             <Header/>
             <BodyWrapper/>
         </div>
