@@ -51,7 +51,7 @@ const ScrollableList = ({ items, CardComponent }) => {
 
             <div 
                 ref={scrollRef} 
-                className="inline-flex overflow-x-auto scroll-smooth snap-x snap-mandatory space-x-4 p-4 scrollbar-hidden max-w-full"
+                className="inline-flex overflow-x-auto scroll-smooth scrollbar-hidden max-w-full"
             >
 
                 {items.map((item, index) => (
