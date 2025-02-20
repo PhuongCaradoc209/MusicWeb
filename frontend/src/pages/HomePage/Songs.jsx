@@ -1,5 +1,6 @@
 import React from 'react'
 import TopSongs from '../../components/TopSongs'
+import NewReleaseSongs from '../../components/NewReleaseSongs'
 
 function Songs() {
     return (
@@ -21,7 +22,7 @@ function Songs() {
         // </div>
         }
         <div className='h-64 bg-color_1 rounded-3xl mx-4'></div>
-        <TopSongs/>
+        <NewReleaseSongs/>
     </div>
     )
 }

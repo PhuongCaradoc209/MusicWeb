@@ -6,6 +6,9 @@ export default {
   ],
   theme: {
     extend: {
+      animation: {
+        'spin-slow': 'spin 25s linear infinite',
+      },
       colors:{
         color_0: '#585453',
         color_0_bold: '#3d3b3b',
