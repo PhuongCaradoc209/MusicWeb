@@ -25,6 +25,7 @@ public class WeeklySongsService {
 
     @Cacheable(value = "top10songs", key = "'weeklyTop10'", unless = "#result == null || #result.isEmpty()")
     public List<Map<String, String>> getTop10SongsWithDetails() {
+        System.out.println("⏳ Fetching top 10 songs from Database...");
         return weeklySongsRepository.findTop10ByOrderByRankAsc()
                 .stream()
                 .map(this::mapToSongDetails)
