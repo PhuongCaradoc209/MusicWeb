@@ -16,8 +16,9 @@ Welcome to **Music Web**, a full-stack music application built with **Spring Boo
 - Spring Boot  
 - Spring Security (Authentication & Authorization)  
 - JPA/Hibernate (Database ORM)  
-- PostgreSQL/MySQL  
+- MySQL  
 - RESTful APIs  
+- Redis Cache (Using Docker)
 
 ### Frontend (React)  
 - React.js  
@@ -30,16 +31,41 @@ Welcome to **Music Web**, a full-stack music application built with **Spring Boo
 ### 🔹 Prerequisites  
 - Install **Node.js** & **npm/yarn**  
 - Install **Java 23+**  
-- Install **PostgreSQL/MySQL**  
+- Install **MySQL**  
+- Install **Docker** (to run Redis)
 
 ### 🔹 Backend Setup  
 
-```sh
-cd backend
-./mvnw spring-boot:run
+1. Clone the repository and navigate to the backend folder:  
+   ```sh
+   cd backend
+   ```
+2. Start Redis in Docker (if not already running):  
+   ```sh
+   docker run --name redis -d -p 6379:6379 redis
+   ```
+3. Run the Spring Boot application:  
+   ```sh
+   ./mvnw spring-boot:run
+   ```
 
 ### 🔹 Frontend Setup  
 
-```sh
-cd frontend
-npm run dev
+1. Navigate to the frontend folder:  
+   ```sh
+   cd frontend
+   ```
+2. Install dependencies and start the development server:  
+   ```sh
+   npm install
+   npm run dev
+   ```
+
+## 📖 API Documentation  
+- Access API documentation at: [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html) *(Nếu sử dụng Swagger)*
+
+## 🤝 Contributing  
+Contributions are welcome! Please refer to `CONTRIBUTING.md` for details on our code of conduct and the process for submitting pull requests.
+
+## 📄 License  
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
