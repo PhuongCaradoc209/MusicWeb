@@ -62,7 +62,7 @@ Welcome to **Music Web**, a full-stack music application built with **Spring Boo
    ```
 
 ## 📖 API Documentation  
-- Access API documentation at: [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html) *(Nếu sử dụng Swagger)*
+- Access API documentation at: [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
 
 ## 🤝 Contributing  
 Contributions are welcome! Please refer to `CONTRIBUTING.md` for details on our code of conduct and the process for submitting pull requests.
