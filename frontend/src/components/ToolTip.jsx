@@ -10,7 +10,7 @@ const ToolTip = ({
 }) => {
     return (
         <div 
-            className="absolute hidden group-hover:block 
+            className="absolute hidden group-hover:block peer-hover:block
                         bg-gray-600 text-white border border-white font-light
                         shadow-lg z-50 px-2 py-1 text-sm
                         w-fit text-nowrap   
