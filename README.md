@@ -1,40 +1,51 @@
-# 🎵 Music Web  
+# 🎵 Music Web
 
-Welcome to **Music Web**, a full-stack music application built with **Spring Boot** for the backend and **React** for the frontend.  
+Welcome to **Music Web**, a full-stack music application built with **Spring Boot** for the backend and **React** for the frontend.
 
-## 🚀 Features  
+## 📌 Table of Contents
+- [🚀 Features](#-features)
+- [🛠️ Technologies](#%EF%B8%8F-technologies)
+  - [Backend (Spring Boot)](#backend-spring-boot)
+  - [Frontend (React)](#frontend-react)
+- [⚡ Getting Started](#-getting-started)
+  - [🔹 Prerequisites](#-prerequisites)
+  - [🔹 Backend Setup](#-backend-setup)
+  - [🔹 Frontend Setup](#-frontend-setup)
+- [📖 API Documentation](#-api-documentation)
+- [📄 License](#-license)
 
+## 🚀 Features
 - 🎧 Play and manage music  
 - 🔍 Search for songs and artists  
 - 📝 User authentication and profile management  
 - 🎶 Playlist creation and sharing  
 
-## 🛠️ Technologies  
+## 🛠️ Technologies
 
-### Backend (Spring Boot)  
-- Java 23  
-- Spring Boot  
-- Spring Security (Authentication & Authorization)  
-- JPA/Hibernate (Database ORM)  
-- MySQL  
-- RESTful APIs  
+### Backend (Spring Boot)
+- Java 23
+- Spring Boot
+- Spring Security (Authentication & Authorization)
+- JPA/Hibernate (Database ORM)
+- MySQL
+- RESTful APIs
 - Redis Cache (Using Docker)
 
-### Frontend (React)  
-- React.js  
-- Redux (State management)  
-- Tailwind CSS / Material UI (Styling)  
-- Axios (API calls)  
+### Frontend (React)
+- React.js
+- Redux (State management)
+- Tailwind CSS / Material UI (Styling)
+- Axios (API calls)
 
-## ⚡ Getting Started  
+## ⚡ Getting Started
 
-### 🔹 Prerequisites  
-- Install **Node.js** & **npm/yarn**  
-- Install **Java 23+**  
-- Install **MySQL**  
+### 🔹 Prerequisites
+- Install **Node.js** & **npm/yarn**
+- Install **Java 23+**
+- Install **MySQL**
 - Install **Docker** (to run Redis)
 
-### 🔹 Backend Setup  
+### 🔹 Backend Setup
 
 1. Clone the repository and navigate to the backend folder:  
    ```sh
@@ -49,7 +60,7 @@ Welcome to **Music Web**, a full-stack music application built with **Spring Boo
    ./mvnw spring-boot:run
    ```
 
-### 🔹 Frontend Setup  
+### 🔹 Frontend Setup
 
 1. Navigate to the frontend folder:  
    ```sh
@@ -61,11 +72,8 @@ Welcome to **Music Web**, a full-stack music application built with **Spring Boo
    npm run dev
    ```
 
-## 📖 API Documentation  
+## 📖 API Documentation
 - Access API documentation at: [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
 
-## 🤝 Contributing  
-Contributions are welcome! Please refer to `CONTRIBUTING.md` for details on our code of conduct and the process for submitting pull requests.
-
-## 📄 License  
+## 📄 License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
