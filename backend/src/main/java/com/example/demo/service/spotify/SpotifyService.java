@@ -1,5 +1,7 @@
 package com.example.demo.service.spotify;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
@@ -9,8 +11,11 @@ import java.util.*;
 
 @Service
 public class SpotifyService {
-    private static final String CLIENT_ID = "73d67f6d5eb64d8388129f9ac3e1f2ad";
-    private static final String CLIENT_SECRET = "fa214010f1f346f4a50bd519b3fc9cf9";
+    @Value("${spotify.client.id}")
+    private String CLIENT_ID;
+    @Value("${spotify.client.secret}")
+    private String CLIENT_SECRET;
+
     private static final String TOKEN_URL = "https://accounts.spotify.com/api/token";
     private static final String BASE_URL = "https://api.spotify.com/v1";
 
@@ -19,7 +24,14 @@ public class SpotifyService {
     /**
      * Lấy access token từ Spotify API.
      */
+    private String cachedAccessToken;
+    private long tokenExpiryTime = 0; // Thời điểm token hết hạn (milliseconds)
+
     public String getAccessToken() {
+        if (cachedAccessToken != null && System.currentTimeMillis() < tokenExpiryTime) {
+            return cachedAccessToken;
+        }
+        // Lấy token mới
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         headers.setBasicAuth(CLIENT_ID, CLIENT_SECRET);
@@ -32,7 +44,10 @@ public class SpotifyService {
         try {
             ResponseEntity<Map> response = restTemplate.exchange(TOKEN_URL, HttpMethod.POST, request, Map.class);
             if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
-                return Objects.toString(response.getBody().get("access_token"), "");
+                cachedAccessToken = Objects.toString(response.getBody().get("access_token"), "");
+                // Giả sử token có thời gian sống là 3600 giây
+                tokenExpiryTime = System.currentTimeMillis() + 3600 * 1000 - 60000; // trừ 1 phút để an toàn
+                return cachedAccessToken;
             } else {
                 throw new RuntimeException("Failed to retrieve access token: " + response.getStatusCode());
             }
@@ -44,6 +59,7 @@ public class SpotifyService {
     /**
      * Lấy danh sách top 10 nghệ sĩ từ Spotify.
      */
+    @Cacheable(value = "topArtists", key = "'artists'")
     public List<Map<String, String>> getTopArtists() {
         String accessToken = getAccessToken();
 
@@ -127,5 +143,97 @@ public class SpotifyService {
         } catch (Exception ignored) {
         }
         return "";
+    }
+
+    @Cacheable(value = "newReleaseTracks", key = "'tracks'")
+    public List<Map<String, String>> getNewReleaseTracks() {
+        String accessToken = getAccessToken();
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + accessToken);
+
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+        String url = BASE_URL + "/browse/new-releases?country=VN&limit=10"; // Lấy 10 album mới nhất tại Việt Nam
+
+        try {
+            ResponseEntity<Map> response = restTemplate.exchange(url, HttpMethod.GET, entity, Map.class);
+            if (response.getStatusCode() != HttpStatus.OK || response.getBody() == null) {
+                throw new RuntimeException("Failed to fetch new releases: " + response.getStatusCode());
+            }
+
+            List<Map<String, String>> tracks = new ArrayList<>();
+            Map<String, Object> albumsData = (Map<String, Object>) response.getBody().get("albums");
+
+            if (albumsData != null) {
+                List<Map<String, Object>> items = (List<Map<String, Object>>) albumsData.get("items");
+
+                if (items != null) {
+                    // Với mỗi album, lấy thông tin ảnh album và chỉ lấy bài hát đầu tiên
+                    for (Map<String, Object> album : items) {
+                        String albumId = album.get("id").toString();
+                        // Lấy ảnh album: thông thường danh sách ảnh nằm trong key "images"
+                        String albumImage = "";
+                        List<Map<String, Object>> images = (List<Map<String, Object>>) album.get("images");
+                        if (images != null && !images.isEmpty()) {
+                            albumImage = images.get(0).get("url").toString();
+                        }
+                        // Lấy bài hát đầu tiên trong album
+                        Map<String, String> trackData = getFirstTrackFromAlbum(accessToken, albumId, albumImage);
+                        if (trackData != null) {
+                            tracks.add(trackData);
+                        }
+                    }
+                }
+            }
+
+            return tracks;
+        } catch (Exception e) {
+            throw new RuntimeException("Error fetching new release tracks: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Lấy bài hát đầu tiên của album và bổ sung thêm ảnh album.
+     */
+    private Map<String, String> getFirstTrackFromAlbum(String accessToken, String albumId, String albumImage) {
+        String url = BASE_URL + "/albums/" + albumId + "/tracks?limit=1"; // Giới hạn chỉ 1 track
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + accessToken);
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+
+        try {
+            ResponseEntity<Map> response = restTemplate.exchange(url, HttpMethod.GET, entity, Map.class);
+            if (response.getStatusCode() != HttpStatus.OK || response.getBody() == null) {
+                throw new RuntimeException("Failed to fetch tracks from album: " + response.getStatusCode());
+            }
+
+            List<Map<String, Object>> items = (List<Map<String, Object>>) response.getBody().get("items");
+
+            if (items != null && !items.isEmpty()) {
+                Map<String, Object> track = items.get(0);
+                Map<String, String> trackData = new HashMap<>();
+                // Lấy tên bài hát
+                trackData.put("name", Objects.toString(track.get("name"), ""));
+                // Lấy id bài hát
+                trackData.put("id", Objects.toString(track.get("id"), ""));
+                // Lấy tên nghệ sĩ (lấy nghệ sĩ đầu tiên)
+                List<Map<String, Object>> artists = (List<Map<String, Object>>) track.get("artists");
+                trackData.put("artist", (artists != null && !artists.isEmpty())
+                        ? Objects.toString(artists.get(0).get("name"), "Unknown")
+                        : "Unknown");
+                // Lấy duration (thời gian chạy, đơn vị ms)
+                trackData.put("duration", Objects.toString(track.get("duration_ms"), "0"));
+                // Thêm ảnh album (được lấy từ album mới phát hành)
+                trackData.put("image", albumImage);
+
+                // Nếu có trường preview, bạn có thể xử lý thêm ở đây
+                Object preview = track.get("preview_url");
+                trackData.put("audioPreview", preview != null ? preview.toString() : "");
+
+                return trackData;
+            }
+            return null;
+        } catch (Exception e) {
+            throw new RuntimeException("Error fetching track from album: " + e.getMessage());
+        }
     }
 }

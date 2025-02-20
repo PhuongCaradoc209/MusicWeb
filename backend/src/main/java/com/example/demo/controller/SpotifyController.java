@@ -35,4 +35,14 @@ public class SpotifyController {
     public List<Map<String, String>> getTopTracks() {
         return weeklySongsService.getTop10SongsWithDetails();
     }
+
+    @GetMapping("/new-release-tracks")
+    public ResponseEntity<?> getNewReleaseTracks() {
+        try {
+            List<Map<String, String>> newReleaseTracks = spotifyService.getNewReleaseTracks();
+            return ResponseEntity.ok(Map.of("tracks", newReleaseTracks));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(Map.of("error", e.getMessage()));
+        }
+    }
 }
