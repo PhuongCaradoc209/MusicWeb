@@ -50,10 +50,10 @@ const NewReleaseSongs = () => {
     }, []);
 
     return (
-    <div className="h-fit rounded-2xl px-4 py-6 bg-color_body space-y-4 text-lg">
+    <div className="h-fit rounded-2xl px-4 py-6 space-y-4 text-lg">
         <div className="flex justify-between items-center">
         <p className="font-medium text-white">New Release Songs</p>
-        <p className="text-gray-400 hover:text-white cursor-pointer text-sm transition duration-200">
+        <p className="text-gray-100 hover:underline cursor-pointer text-sm transition duration-200">
             See all
         </p>
         </div>
