@@ -1,28 +1,30 @@
 import React from 'react'
 import TopSongs from '../../components/TopSongs'
 import NewReleaseSongs from '../../components/NewReleaseSongs'
+import musicHand from '../../assets/items/musicHand.png'
 
 function Songs() {
     return (
-    <div className='bg-color_body mt-4 p-4 col-span-5
+    <div className='col-span-5 rounded-2xl
+                bg-gradient-to-l from-[#fe5c3c] to-[#63061a]
                 overflow-y-auto scrollbar-hidden text-white
                 space-y-2'>
-        {
-        // <div className="relative h-48 flex items-center justify-center overflow-hidden">
-        //     <div className="-mt-48
-        //                     w-96 h-96 bg-gray-200 
-        //                     flex justify-center
-        //                     p-4 rounded-full
-        //                     animate-[spin_5s_linear_infinite]">
-        //         <img 
-        //             src="src/assets/record.png" 
-        //             className="w-full h-full object-contain"
-        //         />
-        //     </div>
-        // </div>
-        }
-        <div className='h-64 bg-color_1 rounded-3xl mx-4'></div>
-        <NewReleaseSongs/>
+        <div className='relative w-full h-72 flex justify-center items-center'>
+            <img 
+                src={musicHand} 
+                className='w-[50%] aspect-square object-cover relative z-20'
+                alt="Music Hand"
+            />
+            <div className='absolute inset-0 bg-gradient-to-b from-color_body to-transparent z-10' />
+        </div>
+
+
+        <div className='p-4'>
+            <NewReleaseSongs/>
+            <NewReleaseSongs/>
+            <NewReleaseSongs/>
+            <NewReleaseSongs/>
+        </div>
     </div>
     )
 }
