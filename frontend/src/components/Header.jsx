@@ -1,10 +1,18 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { CiSearch } from 'react-icons/ci'
 import SignUpLogInButton from '../components/SignUpLogInButton'
+import { AuthContext } from '../helpers/AuthorProvider'
+import AvatarMenu from './AvatarMenu';
+import ToolTip from './ToolTip';
+import { IoNotificationsOutline } from 'react-icons/io5';
 
 function Header() {
+    const { isAuthenticated } = useContext(AuthContext);
+
     return (
-    <div className="relative flex items-center justify-between h-20 px-6 py-6">
+    <div className="absolute top-0 left-0 w-full z-50 h-20 
+                    flex items-center justify-between px-6 py-6
+                    bg-color_body">
         <div className="flex items-center border-b py-2 w-1/6 sm:w-1/2">
             <CiSearch size={32} className="text-white mr-3 cursor-pointer" />
             <input 
@@ -15,18 +23,20 @@ function Header() {
         </div>
     
         <div className="flex items-center gap-x-2 text-2xl text-gray-400">
-            {
-            //     <div className="relative group">
-            //     <IoNotificationsOutline 
-            //         size={24} 
-            //         className="cursor-pointer hover:text-white transition duration-200" 
-            //     />
-            //     <ToolTip text={"Notification"} left='50%'/>
-            // </div>
-            
-            // <AvatarMenu/>
-            }
-            <SignUpLogInButton/>
+                {isAuthenticated ? (
+                    <>
+                        <div className="relative group">
+                            <IoNotificationsOutline 
+                                size={24} 
+                                className="cursor-pointer hover:text-white transition duration-200 mr-6" 
+                            />
+                            <ToolTip text={"Notification"} left="50%" />
+                        </div>
+                        <AvatarMenu/>
+                    </>
+                ) : (
+                    <SignUpLogInButton />
+                )}
         </div>
     </div>    
     )

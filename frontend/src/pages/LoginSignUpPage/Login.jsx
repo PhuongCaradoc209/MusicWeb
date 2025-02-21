@@ -1,20 +1,20 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { FcGoogle } from "react-icons/fc";
 import axios from "axios";
 import {useNavigate } from "react-router-dom"; 
+import { AuthContext } from '../../helpers/AuthorProvider';
 
 function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
+    const { login } = useContext(AuthContext);
 
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            const user = { email, password };
-            const response = await axios.post("http://localhost:8080/api/users/login", user);
-            console.log("User logged in:", response.data);
+            await login({ email, password });
             setErrorMessage('');
             navigate("/"); 
         } catch (error) {
