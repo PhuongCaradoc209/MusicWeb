@@ -4,7 +4,7 @@ import Sidebar from '../../components/Sidebar/Sidebar'
 
 function HomePage() {
     return (
-    <div className="min-h-screen bg-gray-400 md:overflow-hidden grid grid-cols-[auto,1fr]">
+    <div className="min-h-screen bg-color_body md:overflow-hidden grid grid-cols-[auto,1fr]">
         <Sidebar/>
         <MainBody/>
     </div>  

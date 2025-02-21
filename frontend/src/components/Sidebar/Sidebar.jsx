@@ -9,8 +9,8 @@ function Sidebar() {
         <div className="flex flex-col flex-grow justify-center gap-y-28">
             <Sidebar_Option title='Library'>
                 <ul className="flex flex-col gap-y-2">
-                    <SidebarOptionItem to={"/browse"}>Browse</SidebarOptionItem>
-                    <SidebarOptionItem to={"/songs"}>Songs</SidebarOptionItem>
+                    <SidebarOptionItem to={"/browsePage"}>Browse</SidebarOptionItem>
+                    <SidebarOptionItem to={"/songsPage"}>Songs</SidebarOptionItem>
                     <SidebarOptionItem to={"/albums"}>Albums</SidebarOptionItem>
                     <SidebarOptionItem to={"/artists"}>Artists</SidebarOptionItem>
                     <SidebarOptionItem to={"/genres"}>Genres</SidebarOptionItem>
@@ -27,8 +27,8 @@ function Sidebar() {
         </div>
 
         {/* Remain mask elements */}
-        <div className="absolute top-0 left-[100%] w-[40px] h-[40px] bg-black remain-mask-top"></div>
-        <div className="absolute bottom-0 left-[100%] w-[40px] h-[40px] bg-black remain-mask-bottom"></div>
+        <div className="absolute top-0 left-[100%] w-[40px] h-[40px] bg-black remain-mask-top z-[99]"></div>
+        <div className="absolute bottom-0 left-[100%] w-[40px] h-[40px] bg-black remain-mask-bottom z-[99]"></div>
         </div>
     )
 }
