@@ -10,7 +10,7 @@ function Songs() {
     return (
         <div className='col-span-5 rounded-2xl
                     bg-gradient-to-l from-[#fe5c3c] to-[#63061a]
-                    overflow-y-auto scrollbar-hidden text-white
+                    overflow-y-auto custom-scrollbar text-white
                     space-y-2'>
             <div className='relative w-full h-72 flex justify-center items-center'>
                 <motion.img 

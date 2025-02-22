@@ -6,10 +6,21 @@ import SignUp from "./pages/LoginSignUpPage/SignUp";
 import BrowsePage from "./pages/HomePage/BrowsePage";
 import SongPage from "./pages/HomePage/SongPage";
 import { AuthProvider } from "./helpers/AuthorProvider";
+import Top_50_page from "./pages/HomePage/Top_50_page";
+import Songs from "./pages/HomePage/Songs";
 
 const homeRoutes = [
   { path: "browsePage", element: <BrowsePage /> },
-  { path: "songsPage", element: <SongPage /> }
+  { 
+    path: "songsPage", 
+    element: <SongPage />, 
+    children: [
+      { index: true, element: <Songs /> }, 
+      { path: "top50/vietnam", element: <Top_50_page /> },
+      { path: "top50/us-uk", element: <Top_50_page /> },
+      { path: "top50/korea", element: <Top_50_page /> },
+    ]
+  }
 ];
 
 function AppRoutes() {

@@ -47,3 +47,25 @@ body {
     background-size: 150% 150%;
     animation: bgAnimation 4s infinite alternate ease-in-out;
 }
+
+.custom-scrollbar {
+    scrollbar-gutter: stable;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+    width: 12px; 
+    border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.203);
+}
+    
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.454);
+}  
