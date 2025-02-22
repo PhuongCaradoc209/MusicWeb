@@ -52,10 +52,10 @@ const NewReleaseSongs = () => {
     return (
     <div className="h-fit rounded-2xl px-4 py-6 space-y-4 text-lg">
         <div className="flex justify-between items-center">
-        <p className="font-medium text-white">New Release Songs</p>
-        <p className="text-gray-100 hover:underline cursor-pointer text-sm transition duration-200">
-            See all
-        </p>
+            <p className="font-medium text-white">New Release Songs</p>
+            <p className="text-gray-100 hover:underline cursor-pointer text-sm transition duration-200">
+                See all
+            </p>
         </div>
         {loading ? (
         <p className="text-gray-400 text-sm">Loading new release songs...</p>
