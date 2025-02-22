@@ -167,16 +167,13 @@ public class SpotifyService {
                 List<Map<String, Object>> items = (List<Map<String, Object>>) albumsData.get("items");
 
                 if (items != null) {
-                    // Với mỗi album, lấy thông tin ảnh album và chỉ lấy bài hát đầu tiên
                     for (Map<String, Object> album : items) {
                         String albumId = album.get("id").toString();
-                        // Lấy ảnh album: thông thường danh sách ảnh nằm trong key "images"
                         String albumImage = "";
                         List<Map<String, Object>> images = (List<Map<String, Object>>) album.get("images");
                         if (images != null && !images.isEmpty()) {
                             albumImage = images.get(0).get("url").toString();
                         }
-                        // Lấy bài hát đầu tiên trong album
                         Map<String, String> trackData = getFirstTrackFromAlbum(accessToken, albumId, albumImage);
                         if (trackData != null) {
                             tracks.add(trackData);
@@ -191,11 +188,8 @@ public class SpotifyService {
         }
     }
 
-    /**
-     * Lấy bài hát đầu tiên của album và bổ sung thêm ảnh album.
-     */
     private Map<String, String> getFirstTrackFromAlbum(String accessToken, String albumId, String albumImage) {
-        String url = BASE_URL + "/albums/" + albumId + "/tracks?limit=1"; // Giới hạn chỉ 1 track
+        String url = BASE_URL + "/albums/" + albumId + "/tracks?limit=1";
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + accessToken);
         HttpEntity<String> entity = new HttpEntity<>(headers);
@@ -211,21 +205,19 @@ public class SpotifyService {
             if (items != null && !items.isEmpty()) {
                 Map<String, Object> track = items.get(0);
                 Map<String, String> trackData = new HashMap<>();
-                // Lấy tên bài hát
+                //NAME SONG
                 trackData.put("name", Objects.toString(track.get("name"), ""));
-                // Lấy id bài hát
+                //ID SONG
                 trackData.put("id", Objects.toString(track.get("id"), ""));
-                // Lấy tên nghệ sĩ (lấy nghệ sĩ đầu tiên)
+                //FIRST ARTIST
                 List<Map<String, Object>> artists = (List<Map<String, Object>>) track.get("artists");
                 trackData.put("artist", (artists != null && !artists.isEmpty())
                         ? Objects.toString(artists.get(0).get("name"), "Unknown")
                         : "Unknown");
-                // Lấy duration (thời gian chạy, đơn vị ms)
                 trackData.put("duration", Objects.toString(track.get("duration_ms"), "0"));
-                // Thêm ảnh album (được lấy từ album mới phát hành)
+                //IMAGE FROM ALBUM
                 trackData.put("image", albumImage);
 
-                // Nếu có trường preview, bạn có thể xử lý thêm ở đây
                 Object preview = track.get("preview_url");
                 trackData.put("audioPreview", preview != null ? preview.toString() : "");
 
