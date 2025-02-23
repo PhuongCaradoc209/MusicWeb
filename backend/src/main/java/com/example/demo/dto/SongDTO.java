@@ -10,11 +10,12 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class SongDTO {
-    private Long id;
+    private String spotifyId;
     private String title;
-    private Long artistId;
-    private long albumId;
+    private String artistName;
+    private String albumName;
+    private String albumImageUrl;
     private long duration;
     private LocalDateTime releaseDate;
-    private String genre;
+    private String previewUrl;
 }

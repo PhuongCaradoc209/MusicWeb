@@ -8,24 +8,14 @@ import org.springframework.stereotype.Component;
 public class SongMapper {
     public static SongDTO toSongDTO(Song song) {
         return (song == null) ? null : SongDTO.builder()
-                .id(song.getId())
+                .spotifyId(song.getSpotifyId())
                 .title(song.getTitle())
-                .artistId(song.getArtistId())
-                .albumId(song.getAlbumId())
+                .artistName(song.getArtist().getName())
+                .albumName(song.getAlbum().getName())
+                .albumImageUrl(song.getAlbum().getImageUrl())
                 .duration(song.getDuration())
                 .releaseDate(song.getReleaseDate())
-                .genre(song.getGenre())
+                .previewUrl(song.getPreviewUrl())
                 .build();
-    }
-    public static Song toSong(SongDTO songDTO) {
-        return (songDTO == null) ? null : new Song(
-                songDTO.getId(),
-                songDTO.getTitle(),
-                songDTO.getArtistId(),
-                songDTO.getAlbumId(),
-                songDTO.getDuration(),
-                songDTO.getReleaseDate(),
-                songDTO.getGenre()
-        );
     }
 }
