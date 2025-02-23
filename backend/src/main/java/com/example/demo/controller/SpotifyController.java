@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.SongDTO;
 import com.example.demo.model.Song;
 import com.example.demo.service.song.WeeklySongsService;
 import com.example.demo.service.spotify.SpotifyService;
@@ -45,4 +46,14 @@ public class SpotifyController {
             return ResponseEntity.internalServerError().body(Map.of("error", e.getMessage()));
         }
     }
+
+//    @GetMapping("/top50-vn")
+//    public ResponseEntity<?> getTop50_VN() {
+//        try {
+//            List<Map<String, String>> tracks = spotifyService.getTop50_VN();
+//            return ResponseEntity.ok(Map.of("tracks", tracks));
+//        } catch (Exception e) {
+//            return ResponseEntity.internalServerError().body(Map.of("error", e.getMessage()));
+//        }
+//    }
 }
