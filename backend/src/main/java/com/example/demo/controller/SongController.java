@@ -15,29 +15,34 @@ public class SongController {
     @Autowired
     private SongService songService;
 
-    @PostMapping
-    public ResponseEntity<SongDTO> createSong(@RequestBody SongDTO songDTO) {
-        return ResponseEntity.ok(songService.createSong(songDTO));
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<SongDTO> getSongById(@PathVariable Long id) {
-        return ResponseEntity.ok(songService.getSongById(id));
-    }
-
-    @GetMapping
-    public ResponseEntity<List<SongDTO>> getAllSongs() {
-        return ResponseEntity.ok(songService.getAllSongs());
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<SongDTO> updateSong(@PathVariable Long id, @RequestBody SongDTO songDTO) {
-        return ResponseEntity.ok(songService.updateSong(id, songDTO));
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteSong(@PathVariable Long id) {
-        songService.deleteSong(id);
-        return ResponseEntity.noContent().build();
+//    @PostMapping
+//    public ResponseEntity<SongDTO> createSong(@RequestBody SongDTO songDTO) {
+//        return ResponseEntity.ok(songService.createSong(songDTO));
+//    }
+//
+//    @GetMapping("/{id}")
+//    public ResponseEntity<SongDTO> getSongById(@PathVariable Long id) {
+//        return ResponseEntity.ok(songService.getSongById(id));
+//    }
+//
+//    @GetMapping
+//    public ResponseEntity<List<SongDTO>> getAllSongs() {
+//        return ResponseEntity.ok(songService.getAllSongs());
+//    }
+//
+//    @PutMapping("/{id}")
+//    public ResponseEntity<SongDTO> updateSong(@PathVariable Long id, @RequestBody SongDTO songDTO) {
+//        return ResponseEntity.ok(songService.updateSong(id, songDTO));
+//    }
+//
+//    @DeleteMapping("/{id}")
+//    public ResponseEntity<Void> deleteSong(@PathVariable Long id) {
+//        songService.deleteSong(id);
+//        return ResponseEntity.noContent().build();
+//    }
+    @PostMapping("/global-top50")
+    public ResponseEntity<List<SongDTO>> saveGlobalTop50() {
+        List<SongDTO> songDTOs = songService.saveGlobalTop50Tracks();
+        return ResponseEntity.ok(songDTOs);
     }
 }
