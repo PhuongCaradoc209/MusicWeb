@@ -1,5 +1,7 @@
 package com.example.demo.service.spotify;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.*;
@@ -15,6 +17,8 @@ public class SpotifyService {
     private String CLIENT_ID;
     @Value("${spotify.client.secret}")
     private String CLIENT_SECRET;
+
+    private static final Logger logger = LoggerFactory.getLogger(SpotifyService.class);
 
     private static final String TOKEN_URL = "https://accounts.spotify.com/api/token";
     private static final String BASE_URL = "https://api.spotify.com/v1";
@@ -227,5 +231,68 @@ public class SpotifyService {
         } catch (Exception e) {
             throw new RuntimeException("Error fetching track from album: " + e.getMessage());
         }
+    }
+
+    @Cacheable(value = "globalTop50", key = "'top'", unless = "#result == null || #result.isEmpty()")
+    public List<Map<String, Object>> getGlobalTop50Tracks() {
+        String accessToken = getAccessToken();
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + accessToken);
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+
+
+        // Thay YOUR_PLAYLIST_ID bằng ID playlist cá nhân của bạn
+        String url = BASE_URL + "/playlists/5dRf6aFdWTzAwxVMRzIqhv/tracks?limit=50";
+
+        try {
+            ResponseEntity<Map> response = restTemplate.exchange(url, HttpMethod.GET, entity, Map.class);
+
+            if (response.getStatusCode() != HttpStatus.OK || response.getBody() == null) {
+                throw new RuntimeException("Failed to fetch My Top 50 tracks: " + response.getStatusCode());
+            }
+
+            List<Map<String, Object>> items = (List<Map<String, Object>>) response.getBody().get("items");
+            List<Map<String, Object>> tracks = new ArrayList<>();
+            if (items != null) {
+                for (Map<String, Object> item : items) {
+                    Map<String, Object> trackObj = (Map<String, Object>) item.get("track");
+                    if (trackObj != null) {
+                        tracks.add(trackObj);
+                    }
+                }
+            }
+            return tracks;
+        } catch (Exception e) {
+            logger.error("Error fetching My Top 50 tracks", e);
+            return Collections.emptyList();
+        }
+    }
+
+    public Map<String, Object> getTrackData(String trackId) {
+        String accessToken = getAccessToken();
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + accessToken);
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+        String url = BASE_URL + "/tracks/" + trackId;
+
+        try {
+            ResponseEntity<Map> response = restTemplate.exchange(url, HttpMethod.GET, entity, Map.class);
+            if (response.getStatusCode() != HttpStatus.OK || response.getBody() == null) {
+                throw new RuntimeException("Failed to fetch track details: " + response.getStatusCode());
+            }
+            // Trả về toàn bộ dữ liệu thô của track
+            return response.getBody();
+        } catch (Exception e) {
+            throw new RuntimeException("Error fetching track data: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Chuyển đổi milliseconds thành mm:ss
+     */
+    public String convertMsToMinutes(long millis) {
+        long minutes = (millis / 1000) / 60;
+        long seconds = (millis / 1000) % 60;
+        return String.format("%02d:%02d", minutes, seconds);
     }
 }
