@@ -25,7 +25,6 @@ const NewReleaseSongs = () => {
         return response.json();
         })
         .then((data) => {
-        console.log("Fetched new release songs:", data);
         // Giả sử API trả về dạng { tracks: [ {name, id, artist, duration, image, ...}, ... ] }
         const tracks = data.tracks;
         if (!Array.isArray(tracks)) {
