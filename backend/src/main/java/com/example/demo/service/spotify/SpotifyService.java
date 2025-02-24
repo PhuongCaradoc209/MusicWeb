@@ -233,16 +233,23 @@ public class SpotifyService {
         }
     }
 
-    @Cacheable(value = "globalTop50", key = "'top'", unless = "#result == null || #result.isEmpty()")
-    public List<Map<String, Object>> getGlobalTop50Tracks() {
+    @Cacheable(value = "top50", key = "#country", unless = "#result == null || #result.isEmpty()")
+    public List<Map<String, Object>> getGlobalTop50Tracks(String country) {
         String accessToken = getAccessToken();
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + accessToken);
         HttpEntity<String> entity = new HttpEntity<>(headers);
-
+        String ID_PLAYLIST;
+        if (Objects.equals(country, "global")){
+            ID_PLAYLIST = "5dRf6aFdWTzAwxVMRzIqhv";
+        } else if (Objects.equals(country, "vietnam")) {
+            ID_PLAYLIST = "1OzCJ16JSIlHd2yps5tkfU";
+        } else{
+            ID_PLAYLIST = "0kzHhkwrByLv5Yhx5NXmZP"; //KOREA
+        }
 
         // Thay YOUR_PLAYLIST_ID bằng ID playlist cá nhân của bạn
-        String url = BASE_URL + "/playlists/5dRf6aFdWTzAwxVMRzIqhv/tracks?limit=50";
+        String url = BASE_URL + "/playlists/" + ID_PLAYLIST + "/tracks?limit=50";
 
         try {
             ResponseEntity<Map> response = restTemplate.exchange(url, HttpMethod.GET, entity, Map.class);

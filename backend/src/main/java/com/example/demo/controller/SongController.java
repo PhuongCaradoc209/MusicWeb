@@ -41,8 +41,18 @@ public class SongController {
 //        return ResponseEntity.noContent().build();
 //    }
     @PostMapping("/global-top50")
-    public ResponseEntity<List<SongDTO>> saveGlobalTop50() {
-        List<SongDTO> songDTOs = songService.saveGlobalTop50Tracks();
+    public ResponseEntity<List<SongDTO>> saveTop50() {
+        List<SongDTO> songDTOs = songService.saveTop50Tracks("global");
+        return ResponseEntity.ok(songDTOs);
+    }
+    @PostMapping("/vietnam-top50")
+    public ResponseEntity<List<SongDTO>> saveVNTop50() {
+        List<SongDTO> songDTOs = songService.saveTop50Tracks("vietnam");
+        return ResponseEntity.ok(songDTOs);
+    }
+    @PostMapping("/korea-top50")
+    public ResponseEntity<List<SongDTO>> saveKRTop50() {
+        List<SongDTO> songDTOs = songService.saveTop50Tracks("korea");
         return ResponseEntity.ok(songDTOs);
     }
 }

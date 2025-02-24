@@ -117,8 +117,8 @@ public class SongService implements ISongService {
      * Lấy danh sách Global Top 50 tracks từ Spotify API và lưu chúng vào database.
      * Trả về danh sách SongDTO của các bài hát đã được lưu.
      */
-    public List<SongDTO> saveGlobalTop50Tracks() {
-        List<Map<String, Object>> tracks = spotifyService.getGlobalTop50Tracks();
+    public List<SongDTO> saveTop50Tracks(String country) {
+        List<Map<String, Object>> tracks = spotifyService.getGlobalTop50Tracks(country);
         return tracks.stream().map(trackData -> {
             // Lấy trackId từ dữ liệu track
             String trackId = trackData.get("id").toString();
