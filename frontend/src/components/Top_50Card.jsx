@@ -5,21 +5,7 @@ function Top_50Card({country, fromColor, toColor}) {
     const navigate = useNavigate();
 
     const handleClick = () => {
-        let path = '';
-        switch (country.toLowerCase()) {
-        case 'vietnam':
-            path = '/songsPage/top50/vietnam';
-            break;
-        case 'us-uk':
-            path = '/songsPage/top50/us-uk';
-            break;
-        case 'korea':
-            path = '/songsPage/top50/korea';
-            break;
-        default:
-            break;
-        }
-        navigate(path);
+        navigate(`/songsPage/top50/${country.toLowerCase()}`);
     };
 
     return (

@@ -16,9 +16,7 @@ const homeRoutes = [
     element: <SongPage />, 
     children: [
       { index: true, element: <Songs /> }, 
-      { path: "top50/vietnam", element: <Top_50_page /> },
-      { path: "top50/us-uk", element: <Top_50_page /> },
-      { path: "top50/korea", element: <Top_50_page /> },
+      { path: "top50/:country", element: <Top_50_page /> }
     ]
   }
 ];

@@ -35,8 +35,8 @@ function Songs() {
                     </div>
                     <div className='grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4'>
                         <Top_50Card country='Vietnam' fromColor='#73EC8B' toColor='#15B392'/>
-                        <Top_50Card country='US-UK' fromColor='#B6FFFA' toColor='#687EFF'/>
-                        <Top_50Card country='Korea' fromColor='#FFCD38' toColor='#CF0000'/>
+                        <Top_50Card country='Global' fromColor='#B6FFFA' toColor='#687EFF'/>
+                        <Top_50Card country='korea' fromColor='#FFCD38' toColor='#CF0000'/>
                     </div>
                 </div>
                 <NewReleaseSongs/>

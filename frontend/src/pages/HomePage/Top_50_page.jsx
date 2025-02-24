@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { FaPlay } from 'react-icons/fa';
 import { LuClock3 } from "react-icons/lu";
+import { useParams } from 'react-router-dom';
 
 function Top_50_page() {
+  const {country} = useParams();
   const [songs, setSongs] = useState([]);
+  const color_1 = (country === 'vietnam') ? '#73EC8B' : (country === 'global') ? '#B6FFFA' : '#FFCD38';
+  const color_2 = (country === 'vietnam') ? '#15B392' : (country === 'global') ? '#687EFF' : '#CF0000';
 
-  // Hàm chuyển đổi milliseconds sang mm:ss
   const formatDuration = (ms) => {
     const totalSeconds = Math.floor(ms / 1000);
     const minutes = Math.floor(totalSeconds / 60);
@@ -14,7 +17,8 @@ function Top_50_page() {
   };
 
   useEffect(() => {
-    fetch("http://localhost:8080/api/songs/global-top50", {
+    const lowerCaseCountry = country.toLowerCase();
+    fetch(`http://localhost:8080/api/songs/${lowerCaseCountry}-top50`, {
       method: "POST"
     })
       .then((res) => res.json())
@@ -23,29 +27,45 @@ function Top_50_page() {
         setSongs(data);
       })
       .catch((err) => console.error("Lỗi khi lấy dữ liệu từ backend:", err));
-  }, []);
+  }, [country]);
   
   return (
     <div className='rounded-2xl overflow-y-auto custom-scrollbar text-white space-y-2 h-full'>
-      <div className="relative w-full h-80 grid grid-cols-3 bg-gradient-to-b from-[#15B392] to-color_body">
+      <div className="relative w-full h-80 grid grid-cols-3"
+            style={{ backgroundImage: `linear-gradient(to bottom, ${color_2}, #1f1f1f)` }}>
         <div className='col-span-1 flex justify-center items-center'>
           <div 
-            className="relative h-60 md:h-64 lg:h-72 aspect-square bg-black flex justify-center items-center bg-gradient-to-b from-[#73EC8B] to-[#15B392]">
+            className="relative h-60 md:h-64 lg:h-72 aspect-square bg-black flex justify-center items-center"
+            style={{ backgroundImage: `linear-gradient(to bottom, ${color_1},  ${color_2}` }}>
             <span className="flex flex-col items-center text-2xl md:text-3xl lg:text-5xl font-bold w-[70%]">
               <p>Top 50</p>
               <hr className="my-8 w-full"/>
-              <p className="text-base md:text-lg lg:text-xl uppercase font-medium">Viet Nam</p>
+              <p className="text-base md:text-lg lg:text-xl uppercase font-medium">
+              {
+                country === 'global' ? 'Global' :
+                country === 'vietnam' ? 'Viet Nam' :
+                country === 'korea' ? 'Korea' : country
+              }
+              </p>
             </span>
           </div>
         </div>
         <span className="col-span-2 flex flex-col justify-center">
           <p className='font-medium mb-4'>Playlist</p>
           <p className='font-bold text-7xl'>
-            Top 50 - Viet Nam
+            Top 50 - {
+                country === 'global' ? 'Global' :
+                country === 'vietnam' ? 'Viet Nam' :
+                country === 'korea' ? 'Korea' : country
+              }
           </p>
           <span className='w-[70%] font-medium mt-8'>
             <p>
-              Discover the hottest tracks in Vietnam right now! 
+              Discover the hottest tracks in {
+                country === 'global' ? 'Global' :
+                country === 'vietnam' ? 'Viet Nam' :
+                country === 'korea' ? 'Korea' : country
+              } right now!
             </p>
             <p>
               This chart features the most popular songs, updated regularly based on streaming trends and listener favorites.
@@ -55,7 +75,11 @@ function Top_50_page() {
       </div>
 
       <div className='w-full px-14'>
-        <div className='flex justify-between items-center p-6 w-fit aspect-square rounded-full bg-[#15B392] text-black cursor-pointer'>
+        <div className='flex justify-between items-center 
+                      p-6 w-fit aspect-square rounded-full 
+                      text-black cursor-pointer
+                      transition-all hover:brightness-125'
+            style={{backgroundColor: color_2, }}>
           <FaPlay size={18}/>
         </div>
         <table className="w-full text-sm text-left mt-8" style={{ borderCollapse: "separate", borderSpacing: "0 0.5rem" }}>
