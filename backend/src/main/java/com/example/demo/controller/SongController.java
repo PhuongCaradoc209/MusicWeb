@@ -7,7 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/api/songs")
@@ -54,5 +56,17 @@ public class SongController {
     public ResponseEntity<List<SongDTO>> saveKRTop50() {
         List<SongDTO> songDTOs = songService.saveTop50Tracks("korea");
         return ResponseEntity.ok(songDTOs);
+    }
+    @GetMapping("/new-release-tracks")
+    public ResponseEntity<List<SongDTO>> getNewReleaseTracks() {
+        List<SongDTO> songDTOs = songService.saveNewReleaseTracks();
+        return ResponseEntity.ok(songDTOs);
+    }
+    @GetMapping("/{spotifyId}")
+    public ResponseEntity<Map<String, String>> getVideoBySpotifyId(@PathVariable String spotifyId) {
+        String videoId = songService.getYouTubeVideoIdBySpotifyId(spotifyId);
+        Map<String, String> result = new HashMap<>();
+        result.put("videoId", videoId);
+        return ResponseEntity.ok(result);
     }
 }
