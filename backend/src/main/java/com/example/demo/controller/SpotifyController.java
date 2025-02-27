@@ -37,15 +37,27 @@ public class SpotifyController {
         return weeklySongsService.getTop10SongsWithDetails();
     }
 
-    @GetMapping("/new-release-tracks")
-    public ResponseEntity<?> getNewReleaseTracks() {
-        try {
-            List<Map<String, String>> newReleaseTracks = spotifyService.getNewReleaseTracks();
-            return ResponseEntity.ok(Map.of("tracks", newReleaseTracks));
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().body(Map.of("error", e.getMessage()));
-        }
+    @GetMapping("/login")
+    public ResponseEntity<String> login() {
+        String url = spotifyService.getSpotifyAuthUrl();
+        return ResponseEntity.ok(url);
     }
+
+    @GetMapping("/callback")
+    public ResponseEntity<?> callback(@RequestParam String code) {
+        String accessToken = spotifyService.getAccessToken(code);
+        return ResponseEntity.ok(Map.of("accessToken", accessToken));
+    }
+
+//    @GetMapping("/new-release-tracks")
+//    public ResponseEntity<?> getNewReleaseTracks() {
+//        try {
+//            List<Map<String, String>> newReleaseTracks = ;
+//            return ResponseEntity.ok(Map.of("tracks", newReleaseTracks));
+//        } catch (Exception e) {
+//            return ResponseEntity.internalServerError().body(Map.of("error", e.getMessage()));
+//        }
+//    }
 
 //    @GetMapping("/top50-vn")
 //    public ResponseEntity<?> getTop50_VN() {

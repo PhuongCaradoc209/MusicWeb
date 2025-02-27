@@ -8,6 +8,7 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import java.util.*;
 
@@ -17,12 +18,12 @@ public class SpotifyService {
     private String CLIENT_ID;
     @Value("${spotify.client.secret}")
     private String CLIENT_SECRET;
-
-    private static final Logger logger = LoggerFactory.getLogger(SpotifyService.class);
-
+    @Value("${spotify.redirect.uri}")
+    private String REDIRECT_URI;
     private static final String TOKEN_URL = "https://accounts.spotify.com/api/token";
     private static final String BASE_URL = "https://api.spotify.com/v1";
 
+    private static final Logger logger = LoggerFactory.getLogger(SpotifyService.class);
     private final RestTemplate restTemplate = new RestTemplate();
 
     /**
@@ -30,18 +31,40 @@ public class SpotifyService {
      */
     private String cachedAccessToken;
     private long tokenExpiryTime = 0; // Thời điểm token hết hạn (milliseconds)
+    private String refreshToken; // Lưu refresh token
 
-    public String getAccessToken() {
+    public String getSpotifyAuthUrl() {
+        return "https://accounts.spotify.com/authorize"
+                + "?client_id=" + CLIENT_ID
+                + "&response_type=code"
+                + "&redirect_uri=" + REDIRECT_URI
+                + "&scope=streaming user-read-private user-modify-playback-state";
+    }
+
+    public String getAccessToken(String code) {
+        // Nếu token vẫn còn hạn, trả về luôn
         if (cachedAccessToken != null && System.currentTimeMillis() < tokenExpiryTime) {
             return cachedAccessToken;
         }
-        // Lấy token mới
+
+        // Nếu không có refresh token, lấy access token bằng code (lần đầu đăng nhập)
+        if (refreshToken == null) {
+            return fetchNewAccessToken(code);
+        }
+
+        // Nếu có refresh token, thử refresh token
+        return refreshAccessToken();
+    }
+
+    private String fetchNewAccessToken(String code) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         headers.setBasicAuth(CLIENT_ID, CLIENT_SECRET);
 
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
-        body.add("grant_type", "client_credentials");
+        body.add("grant_type", "authorization_code");
+        body.add("code", code);
+        body.add("redirect_uri", REDIRECT_URI);
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(body, headers);
 
@@ -49,8 +72,9 @@ public class SpotifyService {
             ResponseEntity<Map> response = restTemplate.exchange(TOKEN_URL, HttpMethod.POST, request, Map.class);
             if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
                 cachedAccessToken = Objects.toString(response.getBody().get("access_token"), "");
-                // Giả sử token có thời gian sống là 3600 giây
-                tokenExpiryTime = System.currentTimeMillis() + 3600 * 1000 - 60000; // trừ 1 phút để an toàn
+                refreshToken = Objects.toString(response.getBody().get("refresh_token"), "");
+                tokenExpiryTime = System.currentTimeMillis() + (Integer) response.getBody().get("expires_in") * 1000 - 60000;
+
                 return cachedAccessToken;
             } else {
                 throw new RuntimeException("Failed to retrieve access token: " + response.getStatusCode());
@@ -60,12 +84,51 @@ public class SpotifyService {
         }
     }
 
+    private String refreshAccessToken() {
+        if (refreshToken == null) {
+            throw new RuntimeException("No refresh token available. Please reauthenticate.");
+        }
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        headers.setBasicAuth(CLIENT_ID, CLIENT_SECRET);
+
+        MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
+        body.add("grant_type", "refresh_token");
+        body.add("refresh_token", refreshToken);
+
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(body, headers);
+
+        try {
+            ResponseEntity<Map> response = restTemplate.exchange(TOKEN_URL, HttpMethod.POST, request, Map.class);
+            if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
+                cachedAccessToken = Objects.toString(response.getBody().get("access_token"), "");
+                tokenExpiryTime = System.currentTimeMillis() + (Integer) response.getBody().get("expires_in") * 1000 - 60000;
+
+                // 🔥 Cập nhật refresh token nếu có (tránh mất refresh token khi làm mới)
+                if (response.getBody().containsKey("refresh_token")) {
+                    refreshToken = Objects.toString(response.getBody().get("refresh_token"), "");
+                }
+
+                return cachedAccessToken;
+            } else {
+                throw new RuntimeException("Failed to refresh access token: " + response.getStatusCode());
+            }
+        } catch (HttpClientErrorException e) {
+            if (e.getStatusCode() == HttpStatus.BAD_REQUEST) {
+                // 🔴 Lỗi "invalid_grant" => Refresh token không còn hợp lệ
+                throw new RuntimeException("Refresh token expired. Please reauthenticate.");
+            }
+            throw new RuntimeException("Error refreshing access token: " + e.getMessage());
+        }
+    }
+
     /**
      * Lấy danh sách top 10 nghệ sĩ từ Spotify.
      */
     @Cacheable(value = "topArtists", key = "'artists'")
     public List<Map<String, String>> getTopArtists() {
-        String accessToken = getAccessToken();
+        String accessToken = getAccessToken(null);
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + accessToken);
@@ -107,7 +170,7 @@ public class SpotifyService {
     }
 
     public Map<String, String> getTrackInfo(String trackId) {
-        String accessToken = getAccessToken();
+        String accessToken = getAccessToken(null);
         String url = "https://api.spotify.com/v1/tracks/" + trackId;
 
         HttpHeaders headers = new HttpHeaders();
@@ -151,7 +214,7 @@ public class SpotifyService {
 
     @Cacheable(value = "newReleaseTracks", key = "'tracks'")
     public List<Map<String, String>> getNewReleaseTracks() {
-        String accessToken = getAccessToken();
+        String accessToken = getAccessToken(null);
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + accessToken);
 
@@ -192,7 +255,7 @@ public class SpotifyService {
         }
     }
 
-    private Map<String, String> getFirstTrackFromAlbum(String accessToken, String albumId, String albumImage) {
+    public Map<String, String> getFirstTrackFromAlbum(String accessToken, String albumId, String albumImage) {
         String url = BASE_URL + "/albums/" + albumId + "/tracks?limit=1";
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + accessToken);
@@ -234,8 +297,8 @@ public class SpotifyService {
     }
 
     @Cacheable(value = "top50", key = "#country", unless = "#result == null || #result.isEmpty()")
-    public List<Map<String, Object>> getGlobalTop50Tracks(String country) {
-        String accessToken = getAccessToken();
+    public List<Map<String, Object>> getTop50Tracks(String country) {
+        String accessToken = getAccessToken(null);
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + accessToken);
         HttpEntity<String> entity = new HttpEntity<>(headers);
@@ -276,7 +339,7 @@ public class SpotifyService {
     }
 
     public Map<String, Object> getTrackData(String trackId) {
-        String accessToken = getAccessToken();
+        String accessToken = getAccessToken(null);
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + accessToken);
         HttpEntity<String> entity = new HttpEntity<>(headers);
