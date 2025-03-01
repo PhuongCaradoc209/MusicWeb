@@ -19,14 +19,17 @@ const AvatarMenu = () => {
             }
         };
         document.addEventListener("mousedown", handleClickOutside);
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
+        return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
     const handleLogout = () => {
-        logout();              
-        navigate("/browsePage");    
+        localStorage.removeItem("spotifyAccessToken");
+        localStorage.removeItem("spotifyRefreshToken");
+        localStorage.removeItem("spotifyTokenExpiry");
+
+        if (logout) logout(); 
+
+        window.location.href = "/login"; 
     };
 
     return (

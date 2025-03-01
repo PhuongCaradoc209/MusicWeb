@@ -23,7 +23,7 @@ function Header() {
         </div>
     
         <div className="flex items-center gap-x-2 text-2xl text-gray-400">
-                {isAuthenticated ? (
+                {!isAuthenticated ? (
                     <>
                         <div className="relative group">
                             <IoNotificationsOutline 
