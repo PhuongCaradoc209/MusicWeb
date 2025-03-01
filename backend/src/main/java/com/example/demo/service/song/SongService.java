@@ -213,4 +213,9 @@ public class SongService implements ISongService {
             throw new RuntimeException("Lỗi khi xử lý dữ liệu từ YouTube API", e);
         }
     }
+
+    public Optional<SongDTO> getSongBySpotifyId(String spotifyId) {
+        return songRepository.findBySpotifyId(spotifyId)
+                .map(SongMapper::toSongDTO);
+    }
 }

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/api/songs")
@@ -63,10 +64,7 @@ public class SongController {
         return ResponseEntity.ok(songDTOs);
     }
     @GetMapping("/{spotifyId}")
-    public ResponseEntity<Map<String, String>> getVideoBySpotifyId(@PathVariable String spotifyId) {
-        String videoId = songService.getYouTubeVideoIdBySpotifyId(spotifyId);
-        Map<String, String> result = new HashMap<>();
-        result.put("videoId", videoId);
-        return ResponseEntity.ok(result);
+    public ResponseEntity<Optional<SongDTO>> getSongBySpotifyId(@PathVariable String spotifyId) {
+        return ResponseEntity.ok(songService.getSongBySpotifyId(spotifyId));
     }
 }
