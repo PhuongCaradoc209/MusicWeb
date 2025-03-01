@@ -111,12 +111,12 @@ const PlayerPage = () => {
 
         const setActiveDevice = async () => {
             try {
-                //STOP PLAY PREVIOUS SONGS
+                //STOP PLAY PREVIOUS SONG
                 await axios.put(
                     "https://api.spotify.com/v1/me/player/pause",
                     {},
                     { headers: { Authorization: `Bearer ${accessToken}` } }
-                );
+                ); 
 
                 await axios.put(
                     "https://api.spotify.com/v1/me/player",
