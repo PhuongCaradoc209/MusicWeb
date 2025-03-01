@@ -2,7 +2,7 @@ import React from 'react'
 import { useNavigate } from "react-router-dom";
 
 function SignUpLogInButton() {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
     return (
     <div>
         <button className='py-2 px-6 text-lg rounded-3xl
