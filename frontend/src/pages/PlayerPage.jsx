@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { FaPlay } from "react-icons/fa";
-import { IoIosPause } from "react-icons/io";
+import { FaPlay, FaPause } from "react-icons/fa";
 
 const PlayerPage = () => {
     const { id } = useParams();
     const [player, setPlayer] = useState(null);
     const [deviceId, setDeviceId] = useState(null);
+    const [isPlaying, setIsPlaying] = useState(false);
+    const [currentTime, setCurrentTime] = useState(0);
+    const [duration, setDuration] = useState(0);
     const accessToken = localStorage.getItem("spotifyAccessToken");
 
     useEffect(() => {
@@ -50,8 +52,6 @@ const PlayerPage = () => {
                 volume: 0.5,
             });
 
-            setPlayer(newPlayer);
-
             newPlayer.addListener("ready", ({ device_id }) => {
                 console.log("✅ Player đã sẵn sàng với Device ID:", device_id);
                 setDeviceId(device_id);
@@ -65,6 +65,14 @@ const PlayerPage = () => {
                 console.error("❌ Lỗi xác thực:", message);
             });
 
+            newPlayer.addListener("player_state_changed", (state) => {
+                if (state) {
+                    setIsPlaying(!state.paused);
+                    setCurrentTime(state.position);
+                    setDuration(state.duration);
+                }
+            });
+
             newPlayer.connect().then((success) => {
                 if (success) {
                     console.log("🎵 Spotify Player đã kết nối thành công!");
@@ -72,6 +80,8 @@ const PlayerPage = () => {
                     console.error("❌ Không thể kết nối với Spotify.");
                 }
             });
+
+            setPlayer(newPlayer);
         };
 
         loadSpotifySDK();
@@ -94,19 +104,28 @@ const PlayerPage = () => {
         checkActiveDevices();
     }, [deviceId, id, accessToken]);
 
+    //START PLAY SONG
     useEffect(() => {
         if (!deviceId) return;
         console.log("🎯 Device ID cập nhật:", deviceId);
 
         const setActiveDevice = async () => {
             try {
+                //STOP PLAY PREVIOUS SONGS
+                await axios.put(
+                    "https://api.spotify.com/v1/me/player/pause",
+                    {},
+                    { headers: { Authorization: `Bearer ${accessToken}` } }
+                );
+
                 await axios.put(
                     "https://api.spotify.com/v1/me/player",
                     { device_ids: [deviceId], play: false },
                     { headers: { Authorization: `Bearer ${accessToken}` } }
                 );
                 console.log("✅ Đã đặt My Spotify Player làm thiết bị chính!");
-
+                
+                //PLAY SELECTED SONG
                 await axios.put(
                     "https://api.spotify.com/v1/me/player/play",
                     { uris: [`spotify:track:${id}`] },
@@ -121,14 +140,100 @@ const PlayerPage = () => {
         setActiveDevice();
     }, [deviceId]); // Chỉ chạy khi deviceId thay đổi
 
+    const togglePlayPause = async () => {
+        if (isPlaying) {
+            await player.pause();
+        } else {
+            await player.resume();
+        }
+        setIsPlaying(!isPlaying);
+    };
+
+    const handleSeek = async (event) => {
+        const seekPosition = event.target.value;
+        await player.seek(seekPosition);
+    };
+
+    useEffect(() => {
+        if (!player) return;
+    
+        let interval;
+        if (isPlaying) {
+            interval = setInterval(async () => {
+                const state = await player.getCurrentState();
+                if (state) {
+                    setCurrentTime(state.position);
+                    setDuration(state.duration);
+                }
+            }, 1000); // Cập nhật mỗi giây
+        } else {
+            clearInterval(interval);
+        }
+    
+        return () => clearInterval(interval);
+    }, [isPlaying, player]);    
+
+    const formatTime = (time) => {
+        const minutes = Math.floor(time / 60000);
+        const seconds = Math.floor((time % 60000) / 1000);
+        return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    };
+
+    const [songInfo, setSongInfo] = useState({
+        title: "",
+        artistName: "",
+        albumImageUrl: "",
+    });
+    
+    useEffect(() => {
+        if (!id || !accessToken) return;
+    
+        const fetchSongInfo = async () => {
+            try {
+                const res = await axios.get(`https://api.spotify.com/v1/tracks/${id}`, {
+                    headers: { Authorization: `Bearer ${accessToken}` },
+                });
+    
+                const track = res.data;
+                setSongInfo({
+                    title: track.name,
+                    artistName: track.artists.map((artist) => artist.name).join(", "),
+                    albumImageUrl: track.album.images[0]?.url || "",
+                });
+    
+                console.log("🎶 Lấy thông tin bài hát thành công:", track);
+            } catch (err) {
+                console.error("❌ Lỗi khi lấy thông tin bài hát:", err.response?.data || err);
+            }
+        };
+    
+        fetchSongInfo();
+    }, [id, accessToken]);
+    
     return (
         <div className="player-container">
             <h1>Now Playing: {id}</h1>
             <p>Spotify Web Player is initialized.</p>
+            <div className="song-info">
+                <img src={songInfo.albumImageUrl} alt={songInfo.title} className="album-cover" />
+                <h2>{songInfo.title}</h2>
+                <p>{songInfo.artistName}</p>
+            </div>
 
-            <FaPlay/>
-            <IoIosPause />
+            <button onClick={togglePlayPause}>
+                {isPlaying ? <FaPause /> : <FaPlay />}
+            </button>
 
+            <input
+                type="range"
+                min={0}
+                max={duration}
+                value={currentTime}
+                onChange={handleSeek}
+            />
+            <div>
+                <span>{formatTime(currentTime)}</span> / <span>{formatTime(duration)}</span>
+            </div>
         </div>
     );
 };

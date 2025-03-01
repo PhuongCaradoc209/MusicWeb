@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { FaPlay } from 'react-icons/fa';
 import { LuClock3 } from "react-icons/lu";
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 function Top_50_page() {
+  const navigate = useNavigate();
   const {country} = useParams();
   const [songs, setSongs] = useState([]);
   const color_1 = (country === 'vietnam') ? '#73EC8B' : (country === 'global') ? '#B6FFFA' : '#FFCD38';
@@ -29,6 +30,11 @@ function Top_50_page() {
       .catch((err) => console.error("Lỗi khi lấy dữ liệu từ backend:", err));
   }, [country]);
   
+  const handleSongClick = (songId) => {
+    console.log("Clicked song id:", songId);
+    navigate(`/player/${songId}`);
+  };
+
   return (
     <div className='rounded-2xl overflow-y-auto custom-scrollbar text-white space-y-2 h-full'>
       <div className="relative w-full h-80 grid grid-cols-3"
@@ -97,7 +103,10 @@ function Top_50_page() {
           <tbody>
             {Array.isArray(songs) && songs.length > 0 ? (
               songs.map((song, index) => (
-                <tr key={song.spotifyID} className="hover:bg-color_0_bold cursor-pointer">
+                <tr 
+                  key={song.spotifyId} 
+                  className="hover:bg-color_0_bold cursor-pointer"
+                  onClick={() => handleSongClick(song.spotifyId)} >
                   <td className="px-4 py-2">{index + 1}</td>
                   <td className="px-4 py-2 flex items-center gap-x-4">
                     <img
