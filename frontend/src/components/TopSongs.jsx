@@ -21,6 +21,7 @@ const TopSongs = () => {
                     throw new Error("Invalid data format from API");
                 }
                 setSongs(data.map(song => ({
+                    id: song.spotifyId,
                     srcImage: song.image || "default.jpg",
                     title: song.title || "Unknown Title",
                     artist: song.artist || "Unknown Artist",
@@ -35,6 +36,11 @@ const TopSongs = () => {
                 setLoading(false); 
             });
     }, []);
+
+    const handleSongClick = (songId) => {
+        console.log("Clicked song id:", songId);
+        navigate(`/player/${songId}`)
+    };
 
     const formatDuration = (ms) => {
         ms = Number(ms);

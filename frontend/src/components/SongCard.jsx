@@ -1,12 +1,13 @@
 import React from "react";
 
-const SongCard = ({ srcImage, title, artist, duration }) => {
+const SongCard = ({id, srcImage, title, artist, duration, onClick }) => {
     return (
     <div
         className="relative w-36 md:w-40 lg:w-44 
                 h-40 md:h-44 lg:h-48
                 cursor-pointer group flex flex-col transition-all duration-200
                 z-0 group-hover:z-50"
+        onClick={() => onClick(id)}
     >
         <img
             className="w-full h-full object-cover flex-1"
@@ -50,7 +51,7 @@ const SongCard = ({ srcImage, title, artist, duration }) => {
             </div>
         </div>
     </div>
-  );
+    );
 };
 
 export default SongCard;
