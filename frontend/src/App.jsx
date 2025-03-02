@@ -18,7 +18,7 @@ const homeRoutes = [
     element: <SongPage />, 
     children: [
       { index: true, element: <Songs /> }, 
-      { path: "top50/:country", element: <Top_50_page /> }
+      { path: "top50/:country/:playlistId", element: <Top_50_page /> }
     ]
   }
 ];
@@ -30,7 +30,7 @@ function AppRoutes() {
     { path: "/login", element: <Login /> },
     { path: "/signup", element: <SignUp /> },
     { path: "/callback", element: <Callback /> },
-    { path: "/player/:id", element: <PlayerPage /> }
+    { path: "/player/top/50/:country/playlist/:playlistId/track/:songId", element: <PlayerPage /> }
   ]);
 }
 
