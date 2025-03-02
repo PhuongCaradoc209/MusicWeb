@@ -5,7 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 function Top_50_page() {
   const navigate = useNavigate();
-  const {country} = useParams();
+  const {country, playlistId} = useParams();
   const [songs, setSongs] = useState([]);
   const color_1 = (country === 'vietnam') ? '#73EC8B' : (country === 'global') ? '#B6FFFA' : '#FFCD38';
   const color_2 = (country === 'vietnam') ? '#15B392' : (country === 'global') ? '#687EFF' : '#CF0000';
@@ -30,9 +30,9 @@ function Top_50_page() {
       .catch((err) => console.error("Lỗi khi lấy dữ liệu từ backend:", err));
   }, [country]);
   
-  const handleSongClick = (songId) => {
+  const handleSongClick = (songId, country) => {
     console.log("Clicked song id:", songId);
-    navigate(`/player/${songId}`);
+    navigate(`/player/top/50/${country}/playlist/${playlistId}/track/${songId}`);
   };
 
   return (
@@ -106,7 +106,7 @@ function Top_50_page() {
                 <tr 
                   key={song.spotifyId} 
                   className="hover:bg-color_0_bold cursor-pointer"
-                  onClick={() => handleSongClick(song.spotifyId)} >
+                  onClick={() => handleSongClick(song.spotifyId, country)} >
                   <td className="px-4 py-2">{index + 1}</td>
                   <td className="px-4 py-2 flex items-center gap-x-4">
                     <img
