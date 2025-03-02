@@ -4,8 +4,14 @@ import { useNavigate } from 'react-router-dom';
 function Top_50Card({country, fromColor, toColor}) {
     const navigate = useNavigate();
 
+    const playlistId = country.toLowerCase() === "global"
+        ? "5dRf6aFdWTzAwxVMRzIqhv"
+        : country.toLowerCase() === "vietnam"
+        ? "1OzCJ16JSIlHd2yps5tkfU"
+        : "0kzHhkwrByLv5Yhx5NXmZP"; // Korea
+
     const handleClick = () => {
-        navigate(`/songsPage/top50/${country.toLowerCase()}`);
+        navigate(`/songsPage/top50/${country.toLowerCase()}/${playlistId}`);
     };
 
     return (
