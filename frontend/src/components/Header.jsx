@@ -7,7 +7,7 @@ import ToolTip from './ToolTip';
 import { IoNotificationsOutline } from 'react-icons/io5';
 
 function Header() {
-    const { isAuthenticated } = useContext(AuthContext);
+    const { isAuthenticated, logout } = useContext(AuthContext);
 
     return (
     <div className="absolute top-0 left-0 w-full z-50 h-20 
@@ -23,7 +23,7 @@ function Header() {
         </div>
     
         <div className="flex items-center gap-x-2 text-2xl text-gray-400">
-                {!isAuthenticated ? (
+                {isAuthenticated ? (
                     <>
                         <div className="relative group">
                             <IoNotificationsOutline 

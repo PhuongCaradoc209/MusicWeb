@@ -12,28 +12,29 @@ function Login() {
     const navigate = useNavigate();
     const { login } = useContext(AuthContext);
 
-    // Xử lý login bằng email/password
     const handleLogin = async (e) => {
         e.preventDefault();
+        setErrorMessage(""); // Reset lỗi cũ
+    
         try {
-            await login({ email, password });
-            setErrorMessage("");
-            navigate("/");
+            const response = await login({ email, password }); // ✅ Gọi login từ AuthContext
+    
+            if (response && response.token) {
+                navigate("/"); // ✅ Chuyển hướng sau khi đăng nhập thành công
+            } else {
+                setErrorMessage("Login failed. Please try again.");
+            }
         } catch (error) {
             console.error("Login error:", error);
-            setErrorMessage(error.response?.data?.message || "An unexpected error occurred.");
+    
+            // ✅ Kiểm tra nếu lỗi từ backend
+            if (error.response && error.response.data && error.response.data.message) {
+                setErrorMessage(error.response.data.message); // ✅ Hiển thị lỗi từ backend
+            } else {
+                setErrorMessage("An unexpected error occurred.");
+            }
         }
-    };
-
-    // Xử lý login với Spotify
-    const handleSpotifyLogin = async () => {
-        try {
-            const response = await axios.get("http://localhost:8080/api/spotify/login"); // Gọi API lấy URL Spotify
-            window.location.href = response.data; // Điều hướng đến trang xác thực của Spotify
-        } catch (error) {
-            console.error("Error getting Spotify auth URL:", error);
-        }
-    };
+    };       
 
     return (
         <div className="flex items-center justify-center min-h-screen w-full px-4 animate-bgAnimation">
@@ -51,17 +52,6 @@ function Login() {
                 >
                     <FcGoogle size={25} className="mr-5" />
                     Log in with Google
-                </button>
-
-                {/* Đăng nhập với Spotify */}
-                <button
-                    type="button"
-                    onClick={handleSpotifyLogin}
-                    className="flex items-center justify-center text-white bg-green-500 py-3 w-full rounded-3xl
-                            transition duration-300 text-lg hover:bg-green-600"
-                >
-                    <FaSpotify size={25} className="mr-5" />
-                    Log in with Spotify
                 </button>
 
                 <hr className="my-8"></hr>
