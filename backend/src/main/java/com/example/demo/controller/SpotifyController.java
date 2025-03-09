@@ -4,9 +4,11 @@ import com.example.demo.dto.SongDTO;
 import com.example.demo.model.Song;
 import com.example.demo.service.song.WeeklySongsService;
 import com.example.demo.service.spotify.SpotifyService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,17 +39,31 @@ public class SpotifyController {
         return weeklySongsService.getTop10SongsWithDetails();
     }
 
-    @GetMapping("/login")
-    public ResponseEntity<String> login() {
-        String url = spotifyService.getSpotifyAuthUrl();
-        return ResponseEntity.ok(url);
+    @GetMapping("/token")
+    public ResponseEntity<Map<String, String>> getAccessToken() {
+        try {
+            String accessToken = spotifyService.getAccessToken();
+            Map<String, String> response = new HashMap<>();
+            response.put("accessToken", accessToken);
+            return ResponseEntity.ok(response); // Trả về JSON
+        } catch (Exception e) {
+            e.printStackTrace();  // Log lỗi để debug
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("message", "Failed to get access token"));
+        }
     }
 
-    @GetMapping("/callback")
-    public ResponseEntity<?> callback(@RequestParam String code) {
-        String accessToken = spotifyService.getAccessToken(code);
-        return ResponseEntity.ok(Map.of("accessToken", accessToken));
-    }
+
+//    @GetMapping("/login")
+//    public ResponseEntity<String> login() {
+//        String url = spotifyService.getSpotifyAuthUrl();
+//        return ResponseEntity.ok(url);
+//    }
+//
+//    @GetMapping("/callback")
+//    public ResponseEntity<?> callback(@RequestParam String code) {
+//        String accessToken = spotifyService.getAccessToken(code);
+//        return ResponseEntity.ok(Map.of("accessToken", accessToken));
+//    }
 
 //    @GetMapping("/new-release-tracks")
 //    public ResponseEntity<?> getNewReleaseTracks() {

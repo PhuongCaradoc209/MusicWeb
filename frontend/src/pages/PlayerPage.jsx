@@ -12,7 +12,20 @@ const PlayerPage = () => {
     const [duration, setDuration] = useState(0);
     const [trackList, setTrackList] = useState([]);
     const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
-    const accessToken = localStorage.getItem("spotifyAccessToken");
+    const [accessToken, setAccessToken] = useState(null); 
+
+    useEffect(() => {
+        const fetchAccessToken = async () => {
+            try {
+                const res = await axios.get("/api/spotify/token"); // Gọi API backend
+                setAccessToken(res.data.accessToken); // Lấy access token từ phản hồi JSON
+            } catch (error) {
+                console.error("❌ Lỗi khi lấy access token:", error);
+            }
+        };
+
+        fetchAccessToken();
+    }, []);
 
     useEffect(() => {
         if (!accessToken) {
