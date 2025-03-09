@@ -13,6 +13,7 @@ public class UserMapper {
         UserDTO userDTO = new UserDTO();
         userDTO.setId(user.getId());
         userDTO.setEmail(user.getEmail());
+        userDTO.setUsername(user.getUsername());
         userDTO.setRole(user.getRole());
         userDTO.setCreatedAt(user.getCreatedAt());
         userDTO.setUpdatedAt(user.getUpdatedAt());
@@ -26,6 +27,7 @@ public class UserMapper {
         User user = new User();
         user.setId(userDTO.getId());
         user.setEmail(userDTO.getEmail());
+        user.setUsername(userDTO.getUsername());
         user.setRole(userDTO.getRole());
         user.setCreatedAt(userDTO.getCreatedAt());
         user.setUpdatedAt(userDTO.getUpdatedAt());
