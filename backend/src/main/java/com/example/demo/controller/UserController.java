@@ -20,31 +20,6 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<UserDTO> registerUser(@RequestBody User user) {
-        try {
-            UserDTO userDTO = userService.registerUser(user);
-            return ResponseEntity.ok(userDTO);
-        } catch (ResponseStatusException ex) {
-            throw ex;
-        } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
-    }
-
-    @PostMapping("/login")
-    public ResponseEntity<UserDTO> loginUser(@RequestBody User user) {
-        try {
-            Optional<UserDTO> userDTO = userService.loginUser(user);
-            return userDTO.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null));
-        } catch (ResponseStatusException ex) {
-            throw ex;
-        } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
-    }
-
-
     @GetMapping("/{id}")
     public ResponseEntity<UserDTO> getUserById(@PathVariable long id) {
         return userService.getUserById(id)
