@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { FaPlay, FaPause, FaStepBackward, FaStepForward } from "react-icons/fa";
+import ColorThief from 'color-thief-browser';
+
 
 const PlayerPage = () => {
     const {country, playlistId, songId } = useParams();  // Nhận cả playlistId và songId
@@ -13,6 +15,10 @@ const PlayerPage = () => {
     const [trackList, setTrackList] = useState([]);
     const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
     const [accessToken, setAccessToken] = useState(null); 
+
+    //COLOR THIEF    
+    const [dominantColor, setDominantColor] = useState('black');
+    const imgRef = useRef(null);
 
     useEffect(() => {
         const fetchAccessToken = async () => {
@@ -118,8 +124,15 @@ const PlayerPage = () => {
                     },
                     { headers: { Authorization: `Bearer ${accessToken}` } }
                 );                
+                setTimeout(async () => {
+                    await axios.put(
+                        "https://api.spotify.com/v1/me/player/seek?position_ms=0",
+                        {},
+                        { headers: { Authorization: `Bearer ${accessToken}` } }
+                    );
+                }, 500);
                 console.log("Songid: " + songId);
-
+            
                 console.log("▶️ Đã phát playlist từ bài hát:", trackList[currentTrackIndex]?.name);
             } catch (err) {
                 console.error("❌ Lỗi khi phát playlist:", err.response?.data || err);
@@ -175,35 +188,116 @@ const PlayerPage = () => {
         }, 1000);
     
         return () => clearInterval(interval);
-    }, [isPlaying]);    
+    }, [isPlaying]);   
+    
+    //COLOR THIEF
+    useEffect(() => {
+        const getDominantColor = () => {
+            if (imgRef.current && imgRef.current.complete) {
+                const colorThief = new ColorThief();
+                const color = colorThief.getColor(imgRef.current);
+                setDominantColor(`rgb(${color[0]}, ${color[1]}, ${color[2]})`);
+            }
+        };
+    
+        getDominantColor();
+    }, [currentTrackIndex, isPlaying]); // Theo dõi track thay đổi hoặc play/pause
+    
+    // Hàm cập nhật màu khi click
+    const updateDominantColor = () => {
+        if (imgRef.current && imgRef.current.complete) {
+            const colorThief = new ColorThief();
+            const color = colorThief.getColor(imgRef.current);
+            setDominantColor(`rgb(${color[0]}, ${color[1]}, ${color[2]})`);
+        }
+    };    
 
     return (
-        <div className="player-container">
-            <h1>Now Playing: {trackList[currentTrackIndex]?.name || "Loading..."}</h1>
-            <p>Spotify Web Player is initialized.</p>
-            
-            <div className="song-info">
-                <img src={trackList[currentTrackIndex]?.album.images[0]?.url || ""} alt={trackList[currentTrackIndex]?.name} className="album-cover" />
-                <h2>{trackList[currentTrackIndex]?.name}</h2>
-                <p>{trackList[currentTrackIndex]?.artists.map(artist => artist.name).join(", ")}</p>
+        <div
+            className="flex flex-col justify-center items-center relative min-h-screen overflow-hidden
+                    bg-black font-title"
+        >
+            <div
+                className="absolute inset-0 bg-black blur-xl
+                        after:absolute after:inset-0 after:bg-black after:opacity-30"
+                style={{
+                    backgroundImage: `url(${trackList[currentTrackIndex]?.album.images[0]?.url || ""})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    backgroundRepeat: "no-repeat",
+                    animation: "rotateBackground 30s linear infinite",
+                    transformOrigin: "center",
+                    backgroundColor: dominantColor,
+                }}
+            ></div>
+
+            <div className="relative h-full w-[33%]
+                        p-4
+                        z-10 text-white
+                        flex flex-col justify-center items-center">
+                <div className="relative aspect-square rounded-xl overflow-hidden mb-8 group
+                                shadow-[0_10px_20px_rgba(0,0,0,0.3)]">
+                    <img
+                        src={trackList[currentTrackIndex]?.album.images[0]?.url || ""}
+                        alt={trackList[currentTrackIndex]?.name}
+                        className="album-cover"
+                    />
+                    <div className="absolute top-1/2 -translate-y-1/2 left-0 w-full
+                                    flex justify-between px-14
+                                    opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <button onClick={() => {
+                                playPreviousSong();
+                                updateDominantColor();
+                            }}disabled={currentTrackIndex === 0}
+                                className="cursor-pointer">
+                            <FaStepBackward size={38} />
+                        </button>
+                        <button onClick={togglePlayPause}>
+                            {isPlaying ? <FaPause size={38}/> : <FaPlay size={38}/>}
+                        </button>
+                        <button  onClick={() => {
+                                playNextSong();
+                                updateDominantColor();
+                            }} disabled={currentTrackIndex >= trackList.length - 1}>
+                            <FaStepForward size={38}/>
+                        </button>
+                    </div>
+                </div>
+
+                <div className="w-full flex justify-between text-sm mb-2">
+                    <span>{formatTime(currentTime)}</span> 
+                    <span>- {formatTime(duration - currentTime)}</span>
+                </div>
+                <input
+                    type="range"
+                    min={0}
+                    max={duration}
+                    value={currentTime}
+                    onChange={(e) => player.seek(e.target.value)}
+                    className="w-full custom-range cursor-pointer mb-2"
+                    style={{
+                        "--track-color": dominantColor, // Màu vùng đã trượt
+                    }}
+                />
+                <span className="text-center leading-6">
+                    <p className="text-base font-[505] uppercase">{trackList[currentTrackIndex]?.name}</p>
+                    <p className="opacity-50">{trackList[currentTrackIndex]?.artists.map(artist => artist.name).join(", ")}</p>
+                </span>
             </div>
 
-            <div className="player-controls">
-                <button onClick={playPreviousSong} disabled={currentTrackIndex === 0}>
-                    <FaStepBackward />
-                </button>
-                <button onClick={togglePlayPause}>
-                    {isPlaying ? <FaPause /> : <FaPlay />}
-                </button>
-                <button onClick={playNextSong} disabled={currentTrackIndex >= trackList.length - 1}>
-                    <FaStepForward />
-                </button>
-            </div>
-
-            <input type="range" min={0} max={duration} value={currentTime} onChange={(e) => player.seek(e.target.value)} />
-            <div>
-                <span>{formatTime(currentTime)}</span> / <span>{formatTime(duration)}</span>
-            </div>
+            {/* CSS Animation */}
+            <style>
+                {`
+                @keyframes rotateBackground {
+                    from {
+                        transform: scale(2.5) rotate(0deg); 
+                    }
+                    to {
+                        transform: scale(2.5) rotate(360deg);
+                    }
+                }
+                `}
+            </style>
         </div>
     );
 };
