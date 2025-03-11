@@ -5,7 +5,7 @@ import { FaPlay, FaPause, FaStepBackward, FaStepForward } from "react-icons/fa";
 import ColorThief from 'color-thief-browser';
 
 
-const PlayerPage = () => {
+const PlaylistPlayer = () => {
     const {country, playlistId, songId } = useParams();  // Nhận cả playlistId và songId
     const [player, setPlayer] = useState(null);
     const [deviceId, setDeviceId] = useState(null);
@@ -302,4 +302,4 @@ const PlayerPage = () => {
     );
 };
 
-export default PlayerPage;
+export default PlaylistPlayer;

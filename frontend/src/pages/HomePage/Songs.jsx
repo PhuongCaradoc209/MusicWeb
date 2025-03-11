@@ -39,8 +39,6 @@ function Songs() {
                         <Top_50Card country='korea' fromColor='#FFCD38' toColor='#CF0000'/>
                     </div>
                 </div>
-                <NewReleaseSongs/>
-                <NewReleaseSongs/>
             </div>
         </div>
     );

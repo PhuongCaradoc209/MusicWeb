@@ -8,8 +8,9 @@ import SongPage from "./pages/HomePage/SongPage";
 import { AuthProvider } from "./helpers/AuthorProvider";
 import Top_50_page from "./pages/HomePage/Top_50_page";
 import Songs from "./pages/HomePage/Songs";
-import PlayerPage from "./pages/PlayerPage";
 import Callback from "./pages/LoginSignUpPage/Callback";
+import PlaylistPlayer from "./pages/Player/PlaylistPlayer";
+import SinglePlayer from "./pages/Player/SinglePlayer";
 
 const homeRoutes = [
   { path: "browsePage", element: <BrowsePage /> },
@@ -30,7 +31,8 @@ function AppRoutes() {
     { path: "/login", element: <Login /> },
     { path: "/signup", element: <SignUp /> },
     { path: "/callback", element: <Callback /> },
-    { path: "/player/top/50/:country/playlist/:playlistId/track/:songId", element: <PlayerPage /> }
+    { path: "/player/top/50/:country/playlist/:playlistId/track/:songId", element: <PlaylistPlayer/> },
+    { path: "/player/:songId", element: <SinglePlayer /> },
   ]);
 }
 
