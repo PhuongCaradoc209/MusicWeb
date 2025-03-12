@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { FaPlay, FaPause } from "react-icons/fa";
+import { formatDuration } from "../../utils/formatDuration";
 
 const SingleSongPlayer = () => {
     const { songId } = useParams();
@@ -231,8 +232,8 @@ const SingleSongPlayer = () => {
                 </div>
 
                 <div className="w-full flex justify-between text-sm mb-2">
-                    <span>{formatTime(currentTime)}</span> 
-                    <span>- {formatTime(duration - currentTime)}</span>
+                    <span>{formatDuration(currentTime)}</span> 
+                    <span>- {formatDuration(duration - currentTime)}</span>
                 </div>
                 <input
                     type="range"

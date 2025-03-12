@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { FaPlay, FaPause, FaStepBackward, FaStepForward } from "react-icons/fa";
 import ColorThief from 'color-thief-browser';
-
+import { formatDuration } from "../../utils/formatDuration";
 
 const PlaylistPlayer = () => {
     const {country, playlistId, songId } = useParams();  // Nhận cả playlistId và songId
@@ -15,10 +15,6 @@ const PlaylistPlayer = () => {
     const [trackList, setTrackList] = useState([]);
     const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
     const [accessToken, setAccessToken] = useState(null); 
-
-    //COLOR THIEF    
-    const [dominantColor, setDominantColor] = useState('black');
-    const imgRef = useRef(null);
 
     useEffect(() => {
         const fetchAccessToken = async () => {
@@ -124,13 +120,22 @@ const PlaylistPlayer = () => {
                     },
                     { headers: { Authorization: `Bearer ${accessToken}` } }
                 );                
-                setTimeout(async () => {
-                    await axios.put(
-                        "https://api.spotify.com/v1/me/player/seek?position_ms=0",
-                        {},
-                        { headers: { Authorization: `Bearer ${accessToken}` } }
-                    );
-                }, 500);
+                const waitForPlayback = setInterval(async () => {
+                    try {
+                        const state = await player.getCurrentState();
+                        if (state && !state.paused) {
+                            clearInterval(waitForPlayback);
+                            await axios.put(
+                                "https://api.spotify.com/v1/me/player/seek?position_ms=0",
+                                {},
+                                { headers: { Authorization: `Bearer ${accessToken}` } }
+                            );
+                            console.log("⏮ Đã tua về 0 giây!");
+                        }
+                    } catch (err) {
+                        console.error("❌ Lỗi khi kiểm tra trạng thái phát nhạc:", err);
+                    }
+                }, 100); 
                 console.log("Songid: " + songId);
             
                 console.log("▶️ Đã phát playlist từ bài hát:", trackList[currentTrackIndex]?.name);
@@ -166,12 +171,6 @@ const PlaylistPlayer = () => {
         }
     };
 
-    const formatTime = (time) => {
-        const minutes = Math.floor(time / 60000);
-        const seconds = Math.floor((time % 60000) / 1000);
-        return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-    };
-
     useEffect(() => {
         if (!isPlaying) return;
     
@@ -189,28 +188,6 @@ const PlaylistPlayer = () => {
     
         return () => clearInterval(interval);
     }, [isPlaying]);   
-    
-    //COLOR THIEF
-    useEffect(() => {
-        const getDominantColor = () => {
-            if (imgRef.current && imgRef.current.complete) {
-                const colorThief = new ColorThief();
-                const color = colorThief.getColor(imgRef.current);
-                setDominantColor(`rgb(${color[0]}, ${color[1]}, ${color[2]})`);
-            }
-        };
-    
-        getDominantColor();
-    }, [currentTrackIndex, isPlaying]); // Theo dõi track thay đổi hoặc play/pause
-    
-    // Hàm cập nhật màu khi click
-    const updateDominantColor = () => {
-        if (imgRef.current && imgRef.current.complete) {
-            const colorThief = new ColorThief();
-            const color = colorThief.getColor(imgRef.current);
-            setDominantColor(`rgb(${color[0]}, ${color[1]}, ${color[2]})`);
-        }
-    };    
 
     return (
         <div
@@ -226,8 +203,7 @@ const PlaylistPlayer = () => {
                     backgroundPosition: "center",
                     backgroundRepeat: "no-repeat",
                     animation: "rotateBackground 30s linear infinite",
-                    transformOrigin: "center",
-                    backgroundColor: dominantColor,
+                    transformOrigin: "center"
                 }}
             ></div>
 
@@ -247,7 +223,6 @@ const PlaylistPlayer = () => {
                                     opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                         <button onClick={() => {
                                 playPreviousSong();
-                                updateDominantColor();
                             }}disabled={currentTrackIndex === 0}
                                 className="cursor-pointer">
                             <FaStepBackward size={38} />
@@ -257,7 +232,6 @@ const PlaylistPlayer = () => {
                         </button>
                         <button  onClick={() => {
                                 playNextSong();
-                                updateDominantColor();
                             }} disabled={currentTrackIndex >= trackList.length - 1}>
                             <FaStepForward size={38}/>
                         </button>
@@ -265,8 +239,8 @@ const PlaylistPlayer = () => {
                 </div>
 
                 <div className="w-full flex justify-between text-sm mb-2">
-                    <span>{formatTime(currentTime)}</span> 
-                    <span>- {formatTime(duration - currentTime)}</span>
+                    <span>{formatDuration(currentTime)}</span> 
+                    <span>- {formatDuration(duration - currentTime)}</span>
                 </div>
                 <input
                     type="range"
@@ -275,9 +249,6 @@ const PlaylistPlayer = () => {
                     value={currentTime}
                     onChange={(e) => player.seek(e.target.value)}
                     className="w-full custom-range cursor-pointer mb-2"
-                    style={{
-                        "--track-color": dominantColor, // Màu vùng đã trượt
-                    }}
                 />
                 <span className="text-center leading-6">
                     <p className="text-base font-[505] uppercase">{trackList[currentTrackIndex]?.name}</p>
