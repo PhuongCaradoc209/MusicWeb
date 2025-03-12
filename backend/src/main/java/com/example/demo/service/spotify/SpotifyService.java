@@ -337,7 +337,7 @@ public class SpotifyService {
         } else if (Objects.equals(country, "vietnam")) {
             ID_PLAYLIST = "1OzCJ16JSIlHd2yps5tkfU";
         } else{
-            ID_PLAYLIST = "0kzHhkwrByLv5Yhx5NXmZP"; //KOREA
+            ID_PLAYLIST = "0kzHhkwrByLv5Yhx5NXmZP"; //CHINA
         }
 
         // Thay YOUR_PLAYLIST_ID bằng ID playlist cá nhân của bạn

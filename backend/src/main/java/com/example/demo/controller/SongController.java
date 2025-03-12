@@ -53,9 +53,9 @@ public class SongController {
         List<SongDTO> songDTOs = songService.saveTop50Tracks("vietnam");
         return ResponseEntity.ok(songDTOs);
     }
-    @PostMapping("/korea-top50")
+    @PostMapping("/china-top50")
     public ResponseEntity<List<SongDTO>> saveKRTop50() {
-        List<SongDTO> songDTOs = songService.saveTop50Tracks("korea");
+        List<SongDTO> songDTOs = songService.saveTop50Tracks("china");
         return ResponseEntity.ok(songDTOs);
     }
     @GetMapping("/new-release-tracks")
