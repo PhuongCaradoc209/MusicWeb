@@ -42,14 +42,6 @@ const TopSongs = () => {
         navigate(`/player/${songId}`)
     };
 
-    const formatDuration = (ms) => {
-        ms = Number(ms);
-        if (!ms || isNaN(ms)) return "0:00";
-        const minutes = Math.floor(ms / 60000);
-        const seconds = Math.floor((ms % 60000) / 1000);
-        return `${minutes}:${seconds.toString().padStart(2, "0")}`;
-    };
-
     return (
         <div className='h-fit rounded-2xl px-4 py-6 bg-color_body space-y-4 text-lg'>
             <div className="flex justify-between items-center">

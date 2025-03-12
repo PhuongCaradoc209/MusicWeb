@@ -8,7 +8,7 @@ function Top_50Card({country, fromColor, toColor}) {
         ? "5dRf6aFdWTzAwxVMRzIqhv"
         : country.toLowerCase() === "vietnam"
         ? "1OzCJ16JSIlHd2yps5tkfU"
-        : "0kzHhkwrByLv5Yhx5NXmZP"; // Korea
+        : "0kzHhkwrByLv5Yhx5NXmZP"; //CHINA
 
     const handleClick = () => {
         navigate(`/songsPage/top50/${country.toLowerCase()}/${playlistId}`);

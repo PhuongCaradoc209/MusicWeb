@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import ScrollableList from "./ScrollableList";
+import useFetchTopArtists from "../hooks/useFetchTopArtists";
 
 function ArtistCard({ image, name }) {
     return (
@@ -16,23 +17,7 @@ function ArtistCard({ image, name }) {
 }
 
 export default function TopArtists() {
-    const [artists, setArtists] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-
-    useEffect(() => {
-        axios.get("http://localhost:8080/api/spotify/top-artists")
-            .then((response) => {
-                setArtists(response.data.artists || []);
-            })
-            .catch((error) => {
-                console.error("Error fetching artists:", error);
-                setError("Failed to load artists. Please try again.");
-            })
-            .finally(() => {
-                setLoading(false);
-            });
-    }, []);
+    const [artists, loading, error] = useFetchTopArtists();
 
     return (
         <div className='h-fit rounded-2xl px-4 py-6 bg-color_body space-y-4 text-lg'>
