@@ -1,12 +1,14 @@
 import React from 'react'
 import Sidebar_Option, { SidebarOptionItem } from './Sidebar_Option'
+import logo from '/logoPage.png'
 
 function Sidebar() {
     return ( 
         <div className='relative flex flex-col w-60 min-w-56 h-screen px-6 md:px-4
                 bg-black text-white py-6 text-lg md:text-base'>
         {/* Sidebar */}
-        <div className="flex flex-col flex-grow justify-center gap-y-28">
+        <img src={logo} className=' w-20 h-20 ml-3 -mb-6'/>
+        <div className=" flex flex-col flex-grow justify-center gap-y-28">
             <Sidebar_Option title='Library'>
                 <ul className="flex flex-col gap-y-2">
                     <SidebarOptionItem to={"/browsePage"}>Browse</SidebarOptionItem>

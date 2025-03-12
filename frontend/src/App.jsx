@@ -3,20 +3,20 @@ import { useEffect } from "react"; // Import useEffect
 import HomePage from "./pages/HomePage/HomePage";
 import Login from "./pages/LoginSignUpPage/Login";
 import SignUp from "./pages/LoginSignUpPage/SignUp";
-import BrowsePage from "./pages/HomePage/BrowsePage";
-import SongPage from "./pages/HomePage/SongPage";
+import BrowsePage from "./pages/HomePage/BrowsePage/BrowsePage";
 import { AuthProvider } from "./helpers/AuthorProvider";
-import Top_50_page from "./pages/HomePage/Top_50_page";
-import Songs from "./pages/HomePage/Songs";
 import Callback from "./pages/LoginSignUpPage/Callback";
 import PlaylistPlayer from "./pages/Player/PlaylistPlayer";
 import SinglePlayer from "./pages/Player/SinglePlayer";
+import Songs from "./pages/HomePage/SongPage/Songs";
+import Top_50_page from "./pages/HomePage/SongPage/Top_50_page";
+import SongPage from "./pages/HomePage/SongPage/SongPage";
 
 const homeRoutes = [
   { path: "browsePage", element: <BrowsePage /> },
   { 
     path: "songsPage", 
-    element: <SongPage />, 
+    element: <SongPage/>,
     children: [
       { index: true, element: <Songs /> }, 
       { path: "top50/:country/:playlistId", element: <Top_50_page /> }

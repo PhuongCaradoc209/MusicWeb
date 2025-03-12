@@ -9,4 +9,4 @@ function SongPage() {
     )
 }
 
-export default SongPage
+export default SongPage;

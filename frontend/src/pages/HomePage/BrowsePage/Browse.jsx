@@ -1,11 +1,11 @@
 import React from 'react';
-import SongList from '../../components/SongList'
-import ArtistCard from '../../components/ArtistCard'
-import ScrollableList from '../../components/ScrollableList';
-import Card from '../../components/Card';
-import TopArtists from '../../components/ArtistCard';
-import billieEilish from '../../assets/artists/billieEilish.png';
-import items from '../../assets/items/items.png'
+import SongList from '../../../components/SongList'
+import ArtistCard from '../../../components/ArtistCard'
+import ScrollableList from '../../../components/ScrollableList';
+import Card from '../../../components/Card';
+import TopArtists from '../../../components/ArtistCard';
+import billieEilish from '../../../assets/artists/billieEilish.png';
+import items from '../../../assets/items/items.png'
 import { FaPlay } from 'react-icons/fa';
 
 const albumItems = [
