@@ -1,20 +1,22 @@
 import { useState, useEffect } from "react";
+import { fetchTop50Songs } from "../service/fetchTop50Songs";
 
 export const useFetchTop50Songs = (country) => {
     const [songs, setSongs] = useState([]);
 
     useEffect(() => {
-    if (!country) return;
-    const lowerCaseCountry = country.toLowerCase();
-    fetch(`http://localhost:8080/api/songs/${lowerCaseCountry}-top50`, {
-        method: "POST",
-    })
-    .then((res) => res.json())
-    .then((data) => {
-        console.log("Fetched new release songs:", data);
-        setSongs(data);
-        })
-    . catch((err) => console.error("Lỗi khi lấy dữ liệu từ backend:", err));
+        const getSongs = async () => {
+            try {
+                const data = await fetchTop50Songs(country);
+                setSongs(data);
+            } catch (error) {
+                console.error("Lỗi khi lấy dữ liệu từ backend:", error);
+            }
+        };
+
+        if (country) {
+            getSongs();
+        }
     }, [country]);
 
     return songs;
