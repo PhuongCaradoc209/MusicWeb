@@ -3,6 +3,8 @@ package com.example.demo.security;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -21,26 +23,33 @@ public class JwtUtil {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String generateToken(String username) {
+    public String generateToken(String email) {
         return Jwts.builder()
-                .setSubject(username)
+                .setSubject(email) // ✅ Đặt username vào `sub` trong payload
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-                .signWith(getSigningKey(), SignatureAlgorithm.HS256) // ✅ Đúng cú pháp cho JJWT 0.11.x
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    public String extractUsername(String token) {
-        return Jwts.parser()  // ✅ Đúng cú pháp cho JJWT 0.11.x
-                .setSigningKey(getSigningKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody()
-                .getSubject();
+    public String extractEmail(String token) {
+        try {
+            Claims claims = Jwts.parser()
+                    .setSigningKey(getSigningKey())
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+            System.out.println("🔍 Debug: Claims - " + claims);
+            return claims.getSubject(); // ✅ Trả về email thay vì username
+        } catch (Exception e) {
+            System.err.println("❌ Debug: Lỗi khi trích xuất email - " + e.getMessage());
+            return null;
+        }
     }
 
+
     public boolean validateToken(String token, String username) {
-        return extractUsername(token).equals(username) && !isTokenExpired(token);
+        return extractEmail(token).equals(username) && !isTokenExpired(token);
     }
 
     private boolean isTokenExpired(String token) {
@@ -51,5 +60,14 @@ public class JwtUtil {
                 .getBody()
                 .getExpiration()
                 .before(new Date());
+    }
+
+    public void addJwtToCookie(HttpServletResponse response, String token) {
+        Cookie cookie = new Cookie("jwt", token);
+        cookie.setHttpOnly(true); // Chặn JavaScript truy cập
+        cookie.setSecure(true); // Chỉ gửi qua HTTPS
+        cookie.setPath("/"); // Áp dụng cho toàn bộ ứng dụng
+        cookie.setMaxAge((int) EXPIRATION_TIME / 1000); // Thời gian sống của cookie
+        response.addCookie(cookie);
     }
 }
