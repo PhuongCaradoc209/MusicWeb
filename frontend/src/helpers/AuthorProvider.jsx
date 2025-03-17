@@ -4,12 +4,10 @@ import { jwtDecode } from "jwt-decode";
 
 export const AuthContext = createContext();
 
-const fetchUserProfile = async (token) => {
+const fetchUserProfile = async () => {
     try {
-        const decoded = jwtDecode(token); // ✅ Giải mã JWT
-        const username = decoded.sub; // ✅ Lấy username từ token
-        const res = await axios.get(`http://localhost:8080/api/users/profile?username=${username}`, {
-            headers: { Authorization: `Bearer ${token}` },
+        const res = await axios.get("http://localhost:8080/api/users/profile", { 
+            withCredentials: true // ✅ Gửi cookie để backend xác thực
         });
         return res.data;
     } catch (error) {
@@ -18,46 +16,52 @@ const fetchUserProfile = async (token) => {
     }
 };
 
+
 export const AuthProvider = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [user, setUser] = useState(null);
 
-    useEffect(() => {
-        const token = localStorage.getItem("token");
-        if (token) {
-            fetchUserProfile(token).then((userData) => {
-                if (userData) {
-                    setUser(userData);
-                    setIsAuthenticated(true);
-                } else {
-                    logout();
-                }
+    // ✅ Kiểm tra trạng thái đăng nhập từ backend
+    const checkAuthStatus = async () => {
+        try {
+            const res = await axios.get("http://localhost:8080/api/auth/status", { 
+                withCredentials: true // ✅ BẮT BUỘC để gửi Cookie
             });
+            console.log("✅ API trả về:", res.data);
+            setUser(res.data);
+            setIsAuthenticated(true);
+        } catch (error) {
+            console.error("❌ Lỗi khi gọi /status:", error);
+            setIsAuthenticated(false);
+            setUser(null);
         }
+    };    
+
+    useEffect(() => {
+        checkAuthStatus();
     }, []);
 
     const login = async (credentials) => {
         try {
-            const res = await axios.post("http://localhost:8080/api/auth/login", credentials);
-            const { token } = res.data;
-    
-            localStorage.setItem("token", token);
-            setIsAuthenticated(true);
-    
-            const userData = await fetchUserProfile(token);
-            setUser(userData);
-    
-            return { token };
+            await axios.post("http://localhost:8080/api/auth/login", credentials, { 
+                withCredentials: true 
+            });
+            await checkAuthStatus();
         } catch (error) {
-            console.error("Login failed:", error);
-            throw error; // ✅ Ném lỗi để `handleLogin()` xử lý
+            throw error;
         }
     };
 
-    const logout = () => {
-        localStorage.removeItem("token");
-        setUser(null);
-        setIsAuthenticated(false);
+    const logout = async () => {
+        try {
+            await axios.post("http://localhost:8080/api/auth/logout", {}, { 
+                withCredentials: true 
+            });
+            setUser(null);
+            setIsAuthenticated(false);
+        } catch (error) {
+            console.error("Logout failed:", error);
+        }
     };
 
     return (

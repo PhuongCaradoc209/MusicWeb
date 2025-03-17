@@ -14,27 +14,21 @@ function Login() {
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        setErrorMessage(""); // Reset lỗi cũ
-    
+        setErrorMessage("");
+
         try {
-            const response = await login({ email, password }); // ✅ Gọi login từ AuthContext
-    
-            if (response && response.token) {
-                navigate("/"); // ✅ Chuyển hướng sau khi đăng nhập thành công
-            } else {
-                setErrorMessage("Login failed. Please try again.");
-            }
+            await login({ email, password }); // ✅ Không cần lấy token nữa
+            navigate("/"); // ✅ Chuyển hướng sau khi đăng nhập thành công
         } catch (error) {
             console.error("Login error:", error);
-    
-            // ✅ Kiểm tra nếu lỗi từ backend
+
             if (error.response && error.response.data && error.response.data.message) {
-                setErrorMessage(error.response.data.message); // ✅ Hiển thị lỗi từ backend
+                setErrorMessage(error.response.data.message);
             } else {
                 setErrorMessage("An unexpected error occurred.");
             }
         }
-    };       
+    };         
 
     return (
         <div className="flex items-center justify-center min-h-screen w-full px-4 animate-bgAnimation">
