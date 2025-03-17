@@ -1,13 +1,30 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { CiSearch } from 'react-icons/ci'
 import SignUpLogInButton from '../components/SignUpLogInButton'
 import { AuthContext } from '../helpers/AuthorProvider'
 import AvatarMenu from './AvatarMenu';
 import ToolTip from './ToolTip';
 import { IoNotificationsOutline } from 'react-icons/io5';
+import { useNavigate } from 'react-router-dom';
 
 function Header() {
-    const { isAuthenticated, logout } = useContext(AuthContext);
+    const [ search, setSearch] = useState('');
+    const { isAuthenticated, user, logout } = useContext(AuthContext);
+    const navigate = useNavigate();
+    const [previousPage, setPreviousPage] = useState(null);
+
+
+    useEffect(() => {
+        if (search.trim() !== '') {
+            if (!previousPage) {
+                setPreviousPage(location.pathname); 
+            }
+            navigate(`/searchPage?q=${encodeURIComponent(search)}`);
+        } else if (previousPage) {
+            navigate(previousPage);
+            setPreviousPage(null); 
+        }
+    }, [search, navigate, location.pathname, previousPage]);
 
     return (
     <div className="absolute top-0 left-0 w-full z-50 h-20 
@@ -19,6 +36,7 @@ function Header() {
                 type="text" 
                 placeholder="Search by title, artist, or albums..." 
                 className="w-full text-base outline-none bg-transparent text-white"
+                onChange={(e) => setSearch(e.target.value)}
             />
         </div>
     

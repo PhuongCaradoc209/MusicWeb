@@ -152,6 +152,27 @@ public class SpotifyService {
         }
     }
 
+    public String searchSpotify(String query) {
+        if (query.isEmpty()) {
+            throw new IllegalArgumentException("Query cannot be empty");
+        }
+
+        String accessToken = getAccessToken();
+        String url = "https://api.spotify.com/v1/search?q=" + query + "&type=track,artist,album&limit=10";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + accessToken);
+
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+
+        if (response.getStatusCode().is2xxSuccessful()) {
+            return response.getBody();
+        } else {
+            throw new RuntimeException("Failed to fetch search results from Spotify");
+        }
+    }
+
     /**
      * Lấy danh sách top 10 nghệ sĩ từ Spotify.
      */

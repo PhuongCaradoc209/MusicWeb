@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { fetchTopArtists } from "../service/fetchTopArtists";
 
