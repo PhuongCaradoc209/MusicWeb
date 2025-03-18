@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import SongList from '../components/SongList';
 import { formatDuration } from '../utils/formatDuration';
 
@@ -10,6 +10,7 @@ function SearchPage() {
 
     const [results, setResults] = useState([]);
     const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (!query) return;
@@ -30,6 +31,10 @@ function SearchPage() {
 
     }, [query]);
 
+    const handleSongClick = (songId) => {
+        navigate(`/player/${songId}`)
+    }
+
     return (
         <div className="p-6 mt-20 text-white overflow-auto custom-scrollbar">
             <h2 className="text-xl font-bold mb-4">Search Results for "{query}"</h2>
@@ -39,13 +44,15 @@ function SearchPage() {
             <ul className="list-disc pl-6">
                 {results.length > 0 ? (
                     results.map((track) => (
-                        <div>
-                            <SongList 
-                                srcImage={track.album.images[0]?.url}
-                                titleSong={track.name}
-                                artist={track.artists.map(artist => artist.name).join(', ')}
-                                duration={formatDuration(track.duration_ms)}/>
-                        </div>
+                        <SongList 
+                            key={track.id} 
+                            id={track.id}
+                            onClick={handleSongClick}
+                            srcImage={track.album.images[0]?.url}
+                            titleSong={track.name}
+                            artist={track.artists.map(artist => artist.name).join(', ')}
+                            duration={formatDuration(track.duration_ms)}
+                        />
                     ))
                 ) : (
                     !loading && <p>No results found.</p>
