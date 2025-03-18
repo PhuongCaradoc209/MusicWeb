@@ -9,7 +9,6 @@ const NewReleaseSongs = () => {
     const navigate = useNavigate(); 
 
     const handleSongClick = (songId) => {
-        console.log("Clicked song id:", songId);
         navigate(`/player/${songId}`)
     };
 
