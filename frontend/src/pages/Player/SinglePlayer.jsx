@@ -1,19 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { FaPlay, FaPause } from "react-icons/fa";
 import { formatDuration } from "../../utils/formatDuration";
+import MusicContext from "../../helpers/MusicProvider";
 
 const SingleSongPlayer = () => {
     const { songId } = useParams();
-    const [player, setPlayer] = useState(null);
     const [deviceId, setDeviceId] = useState(null);
-    const [isPlaying, setIsPlaying] = useState(false);
     const [accessToken, setAccessToken] = useState(null);
-    const [track, setTrack] = useState(null);
-    const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
+    const [prevTrackId, setPrevTrackId] = useState(null);
 
+    const { track, setTrack, isPlaying, setIsPlaying, player, setPlayer, currentTime, setCurrentTime} = useContext(MusicContext);
 
     useEffect(() => {
         const fetchAccessToken = async () => {
@@ -45,6 +44,7 @@ const SingleSongPlayer = () => {
 
     useEffect(() => {
         if (!accessToken) return;
+        if (player) return; 
 
         const loadSpotifySDK = () => {
             if (!window.Spotify) {
@@ -89,14 +89,21 @@ const SingleSongPlayer = () => {
         if (!deviceId || !accessToken || !songId) return;
         console.log("🎯 Device ID cập nhật:", deviceId);
     
+        if (prevTrackId === songId) {
+            console.log("🎵 Bài hát đã phát, không phát lại!");
+            return;
+        }
+
         const setActiveDevice = async () => {
             try {
                 await axios.put(
                     "https://api.spotify.com/v1/me/player",
-                    { device_ids: [deviceId], play: false },
+                    { device_ids: [deviceId] },
                     { headers: { Authorization: `Bearer ${accessToken}` } }
                 );
                 console.log("✅ Đã đặt My Spotify Player làm thiết bị chính!");
+
+                if(isPlaying) {return;}
     
                 await axios.put(
                     `https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`,
@@ -104,7 +111,7 @@ const SingleSongPlayer = () => {
                     { headers: { Authorization: `Bearer ${accessToken}` } }
                 );
                 console.log("▶️ Đã phát bài hát!");
-                
+
                 // Kiểm tra liên tục đến khi phát nhạc rồi tua về 0s
                 const waitForPlayback = setInterval(async () => {
                     try {
@@ -128,22 +135,28 @@ const SingleSongPlayer = () => {
         };
     
         setActiveDevice();
+        setPrevTrackId(songId);
     }, [deviceId, accessToken, songId]);
     
-
     useEffect(() => {
+        if (prevTrackId === songId) return;
+
         if (!player) return;
     
         const interval = setInterval(async () => {
             const state = await player.getCurrentState();
             if (state) {
-                setCurrentTime(state.position);
-                setDuration(state.duration);
+                setCurrentTime(prevTime => {
+                    if (prevTime !== state.position) { // ✅ Chỉ cập nhật nếu giá trị mới khác
+                        return state.position;
+                    }
+                    return prevTime;
+                });
             }
         }, 1000);
     
         return () => clearInterval(interval);
-    }, [player, isPlaying]);    
+    }, [player, isPlaying]);        
 
     const togglePlayPause = async () => {
         if (!player) return;
@@ -162,12 +175,6 @@ const SingleSongPlayer = () => {
             console.error("❌ Lỗi khi chuyển đổi trạng thái phát nhạc:", error);
         }
     };    
-
-    const formatTime = (time) => {
-        const minutes = Math.floor(time / 60000);
-        const seconds = Math.floor((time % 60000) / 1000);
-        return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-    };
 
     return (
         // <div className="flex flex-col items-center justify-center min-h-screen bg-black text-white">
@@ -233,7 +240,7 @@ const SingleSongPlayer = () => {
 
                 <div className="w-full flex justify-between text-sm mb-2">
                     <span>{formatDuration(currentTime)}</span> 
-                    <span>- {formatDuration(duration - currentTime)}</span>
+                    <span>- {formatDuration(track.duration_ms - currentTime)}</span>
                 </div>
                 <input
                     type="range"
