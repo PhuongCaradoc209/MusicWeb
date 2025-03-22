@@ -1,8 +1,6 @@
 package com.example.demo.model;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -10,6 +8,8 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 @Table(name = "album")
 
 public class Album {
@@ -26,9 +26,12 @@ public class Album {
 
     private String imageUrl;
 
-    public Album(String spotifyAlbumId, String name, String imageUrl) {
+    private String artist;
+
+    public Album(String spotifyAlbumId, String name, String imageUrl, String artist) {
         this.spotifyAlbumId = spotifyAlbumId;
         this.name = name;
         this.imageUrl = imageUrl;
+        this.artist = artist;
     }
 }
