@@ -7,6 +7,7 @@ import TopArtists from '../../../components/ArtistCard';
 import billieEilish from '../../../assets/artists/billieEilish.png';
 import items from '../../../assets/items/items.png'
 import { FaPlay } from 'react-icons/fa';
+import NewReleaseAlbums from '../../../components/NewReleaseAlbums';
 
 const albumItems = [
     { srcImage: "https://solution.com.vn/upload_images/images/2021/12/logo-am-nhac/logo-am-nhac-2.jpg", title: "Album 1", artist: "Artist 1" },
@@ -59,15 +60,7 @@ function Browse() {
                 <SongList srcImage={"https://solution.com.vn/upload_images/images/2021/12/logo-am-nhac/logo-am-nhac-2.jpg"} titleSong="Song 4" artist="Artist 4" duration="3:45" /> 
             </div>
         </div>
-        <div className='h-fit rounded-2xl px-4 py-6 bg-color_body space-y-6 text-lg'>
-            <div className='flex justify-between items-center'>
-                <p className='font-medium text-white'>Albums Hot</p>
-                <p className='text-gray-400 hover:text-white cursor-pointer text-sm transition duration-200'>
-                    See all
-                </p>
-            </div>
-            <ScrollableList items={albumItems} CardComponent={Card} />
-        </div>
+        <NewReleaseAlbums/>
     </div>
     )
 }

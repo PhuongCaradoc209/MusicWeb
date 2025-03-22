@@ -22,14 +22,18 @@ const AvatarMenu = () => {
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
-    const handleLogout = () => {
-        localStorage.removeItem("spotifyAccessToken");
-        localStorage.removeItem("spotifyRefreshToken");
-        localStorage.removeItem("spotifyTokenExpiry");
-
-        if (logout) logout(); 
-
-        window.location.href = "/login"; 
+    const handleLogout = async () => {
+        try {
+            await logout(); 
+    
+            localStorage.removeItem("spotifyAccessToken");
+            localStorage.removeItem("spotifyRefreshToken");
+            localStorage.removeItem("spotifyTokenExpiry");
+    
+            navigate("/login");
+        } catch (error) {
+            console.error("Lỗi khi logout:", error);
+        }
     };
 
     return (

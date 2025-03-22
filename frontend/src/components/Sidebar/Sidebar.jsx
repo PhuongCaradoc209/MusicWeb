@@ -13,7 +13,7 @@ function Sidebar() {
                 <ul className="flex flex-col gap-y-2">
                     <SidebarOptionItem to={"/browsePage"}>Browse</SidebarOptionItem>
                     <SidebarOptionItem to={"/songsPage"}>Songs</SidebarOptionItem>
-                    <SidebarOptionItem to={"/albums"}>Albums</SidebarOptionItem>
+                    <SidebarOptionItem to={"/albumsPage"}>Albums</SidebarOptionItem>
                     <SidebarOptionItem to={"/artists"}>Artists</SidebarOptionItem>
                     <SidebarOptionItem to={"/genres"}>Genres</SidebarOptionItem>
                 </ul>
