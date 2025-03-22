@@ -30,6 +30,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
+        String requestURI = request.getRequestURI();
+        if (requestURI.equals("/api/auth/login") || requestURI.equals("/api/auth/register")) {
+            System.out.println("🚀 Bỏ qua JWT filter cho: " + requestURI);
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         String token = null;
         if (request.getCookies() != null) {
