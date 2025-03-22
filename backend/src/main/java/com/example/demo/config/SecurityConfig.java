@@ -36,7 +36,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/spotify/**").permitAll()
                         .requestMatchers("/api/songs/**").permitAll()
-                        .requestMatchers("/api/auth/**").permitAll() // Cho phép login/register không cần token
+                        .requestMatchers("/api/albums/**").permitAll()
+                        .requestMatchers("/api/auth/login", "/api/auth/register", "/api/auth/status").permitAll() // Cho phép login/register không cần token
                         .requestMatchers("/api/admin/**").hasRole("ADMIN") // Chỉ ADMIN truy cập
                         .requestMatchers("/api/user/**").hasAnyRole("USER", "ADMIN") // USER hoặc ADMIN truy cập
                         .anyRequest().authenticated()
