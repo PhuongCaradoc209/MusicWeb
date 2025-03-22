@@ -13,6 +13,7 @@ import Top_50_page from "./pages/HomePage/SongPage/Top_50_page";
 import SongPage from "./pages/HomePage/SongPage/SongPage";
 import { path } from "framer-motion/client";
 import SearchPage from "./pages/SearchPage";
+import AlbumPage from "./pages/AlbumPage";
 
 const homeRoutes = [
   { path: "browsePage", element: <BrowsePage /> },
@@ -24,7 +25,8 @@ const homeRoutes = [
       { path: "top50/:country/:playlistId", element: <Top_50_page /> }
     ]
   },
-  { path: "searchPage", element: <SearchPage/>}
+  { path: "searchPage", element: <SearchPage/>},
+  { path: "albumsPage", element: <AlbumPage/>}
 ];
 
 function AppRoutes() {
