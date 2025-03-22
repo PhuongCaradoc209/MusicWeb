@@ -346,6 +346,50 @@ public class SpotifyService {
         }
     }
 
+    @Cacheable(value = "newReleases", key = "'albums'")
+    public List<Map<String, String>> getNewReleaseAlbums() {
+        String accessToken = getAccessToken();
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + accessToken);
+
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+        String url = BASE_URL + "/browse/new-releases?country=VN&limit=10"; // Lấy 10 album mới nhất tại Việt Nam
+
+        try {
+            ResponseEntity<Map> response = restTemplate.exchange(url, HttpMethod.GET, entity, Map.class);
+            if (response.getStatusCode() != HttpStatus.OK || response.getBody() == null) {
+                throw new RuntimeException("Failed to fetch new release albums: " + response.getStatusCode());
+            }
+
+            List<Map<String, String>> albums = new ArrayList<>();
+            Map<String, Object> albumsData = (Map<String, Object>) response.getBody().get("albums");
+
+            if (albumsData != null) {
+                List<Map<String, Object>> items = (List<Map<String, Object>>) albumsData.get("items");
+
+                if (items != null) {
+                    for (Map<String, Object> album : items) {
+                        Map<String, String> albumData = new HashMap<>();
+                        albumData.put("id", album.get("id").toString());
+                        albumData.put("name", album.get("name").toString());
+
+                        List<Map<String, Object>> images = (List<Map<String, Object>>) album.get("images");
+                        albumData.put("image", (images != null && !images.isEmpty()) ? images.get(0).get("url").toString() : "");
+
+                        List<Map<String, Object>> artists = (List<Map<String, Object>>) album.get("artists");
+                        albumData.put("artist", (artists != null && !artists.isEmpty()) ? artists.get(0).get("name").toString() : "Unknown");
+
+                        albums.add(albumData);
+                    }
+                }
+            }
+
+            return albums;
+        } catch (Exception e) {
+            throw new RuntimeException("Error fetching new release albums: " + e.getMessage());
+        }
+    }
+
     @Cacheable(value = "top50", key = "#country", unless = "#result == null || #result.isEmpty()")
     public List<Map<String, Object>> getTop50Tracks(String country) {
         String accessToken = getAccessToken();
