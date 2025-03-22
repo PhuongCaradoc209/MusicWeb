@@ -6,6 +6,7 @@ import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -63,11 +64,14 @@ public class JwtUtil {
     }
 
     public void addJwtToCookie(HttpServletResponse response, String token) {
-        Cookie cookie = new Cookie("jwt", token);
-        cookie.setHttpOnly(true); // Chặn JavaScript truy cập
-        cookie.setSecure(true); // Chỉ gửi qua HTTPS
-        cookie.setPath("/"); // Áp dụng cho toàn bộ ứng dụng
-        cookie.setMaxAge((int) EXPIRATION_TIME / 1000); // Thời gian sống của cookie
-        response.addCookie(cookie);
+        ResponseCookie cookie = ResponseCookie.from("jwt", token)
+                .httpOnly(true)
+                .secure(true) // 🔥 Nếu dùng HTTPS, đặt thành true
+                .sameSite("None")
+                .path("/")
+                .maxAge(1 * 24 * 60 * 60) // 🔥 Token hết hạn sau 1 ngày
+                .build();
+
+        response.addHeader("Set-Cookie", cookie.toString());
     }
 }

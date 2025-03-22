@@ -9,6 +9,7 @@ import com.example.demo.service.user.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -50,9 +51,20 @@ public class AuthController {
             // ✅ Tìm user bằng email
             UserDTO userDTO = userService.loginUser(user)
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid email or password"));
-
+            System.out.println("Create new use: " + user.getEmail());
             // ✅ Tạo token bằng email
             String token = jwtUtil.generateToken(user.getEmail());
+            System.out.println(token);
+
+//            ResponseCookie clearCookie = ResponseCookie.from("jwt", "")
+//                    .httpOnly(true)
+//                    .secure(false) // Đặt true nếu dùng HTTPS
+//                    .sameSite("None") // Nếu frontend/backend khác domain
+//                    .path("/")
+//                    .maxAge(0) // 🔥 Hết hạn ngay lập tức
+//                    .build();
+
+//            response.addHeader("Set-Cookie", clearCookie.toString());
 
             // ✅ Thêm JWT vào HttpOnly Cookie
             jwtUtil.addJwtToCookie(response, token);

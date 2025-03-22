@@ -108,12 +108,13 @@ public class SongService implements ISongService {
         Map<String, Object> albumData = (Map<String, Object>) trackData.get("album");
         String spotifyAlbumId = albumData.get("id").toString();
         String albumName = albumData.get("name").toString();
-        String imageUrl = "";
+        String imageUrl = albumData.get("img").toString();
+        String artistAl  = albumData.get("artist").toString();
         List<Map<String, Object>> images = (List<Map<String, Object>>) albumData.get("images");
         if (images != null && !images.isEmpty()) {
             imageUrl = images.get(0).get("url").toString();
         }
-        Album album = albumService.findOrCreate(spotifyAlbumId, albumName, imageUrl);
+        Album album = albumService.findOrCreate(spotifyAlbumId, albumName, imageUrl, artistAl);
 
         // Genre: nếu có dữ liệu, nếu không thì để null
         String genre = trackData.get("genre") != null ? trackData.get("genre").toString() : null;
