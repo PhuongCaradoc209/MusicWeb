@@ -16,6 +16,8 @@ const PlaylistPlayer = () => {
     const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
     const [accessToken, setAccessToken] = useState(null); 
 
+    // const { track, setTrack, isPlaying, setIsPlaying, player, setPlayer, currentTime, setCurrentTime } = useContext(MusicContext);
+
     useEffect(() => {
         const fetchAccessToken = async () => {
             try {

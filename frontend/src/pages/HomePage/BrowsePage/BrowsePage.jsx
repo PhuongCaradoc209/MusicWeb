@@ -1,5 +1,5 @@
 import React from 'react'
-import Body_right from './Body_right'
+import Body_right from './MusicPlayer'
 import Browse from "./Browse";
 
 function BrowsePage() {

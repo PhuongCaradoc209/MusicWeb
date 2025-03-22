@@ -14,6 +14,7 @@ import SongPage from "./pages/HomePage/SongPage/SongPage";
 import { path } from "framer-motion/client";
 import SearchPage from "./pages/SearchPage";
 import AlbumPage from "./pages/AlbumPage";
+import { MusicProvider } from "./helpers/MusicProvider";
 
 const homeRoutes = [
   { path: "browsePage", element: <BrowsePage /> },
@@ -62,10 +63,12 @@ export default function App() {
   }, []);
 
   return (
-    <AuthProvider>
-      <Router>
-        <AppRoutes />
-      </Router>
-    </AuthProvider>
+    <MusicProvider> 
+      <AuthProvider>
+        <Router>
+          <AppRoutes />
+        </Router>
+      </AuthProvider>
+    </MusicProvider>
   );
 }
