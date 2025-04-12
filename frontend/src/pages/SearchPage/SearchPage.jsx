@@ -37,7 +37,7 @@ function SearchPage() {
             {/*CONTENTS*/}
             <div className='w-full'>
                 <div className='w-full h-[350px] flex flex-row '>
-                    <p className='md:flex justify-center items-center
+                    <div className='md:flex justify-center items-center
                                 md:flex-[1] 
                                 hidden'>
                         <div
@@ -47,7 +47,7 @@ function SearchPage() {
                             }}>
                             
                         </div>
-                    </p>
+                    </div>
                     <ul className="xl:flex-[2] md:flex-[3] flex-1 list-disc overflow-hidden">
                         {results.length > 0 ? (
                             results.slice(0,4).map((track) => (
