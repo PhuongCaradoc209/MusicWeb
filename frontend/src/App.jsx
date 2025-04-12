@@ -6,7 +6,6 @@ import SignUp from "./pages/LoginSignUpPage/SignUp";
 import BrowsePage from "./pages/HomePage/BrowsePage/BrowsePage";
 import { AuthProvider } from "./helpers/AuthorProvider";
 import Callback from "./pages/LoginSignUpPage/Callback";
-import PlaylistPlayer from "./pages/Player/PlaylistPlayer";
 import SinglePlayer from "./pages/Player/SinglePlayer";
 import Songs from "./pages/HomePage/SongPage/Songs";
 import Top_50_page from "./pages/HomePage/SongPage/Top_50_page";
@@ -15,6 +14,7 @@ import { path } from "framer-motion/client";
 import SearchPage from "./pages/SearchPage/SearchPage";
 import AlbumPage from "./pages/AlbumPage";
 import { MusicProvider } from "./helpers/MusicProvider";
+import PlayerPage from "./pages/Player/PlayerPage";
 
 const homeRoutes = [
   { path: "browsePage", element: <BrowsePage /> },
@@ -37,8 +37,8 @@ function AppRoutes() {
     { path: "/login", element: <Login /> },
     { path: "/signup", element: <SignUp /> },
     { path: "/callback", element: <Callback /> },
-    { path: "/player/top/50/:country/playlist/:playlistId/track/:songId", element: <PlaylistPlayer/> },
-    { path: "/player/:songId", element: <SinglePlayer /> },
+    { path: "/player/top/50/:country/playlist/:playlistId/track/:songId", element: <PlayerPage/> },
+    { path: "/player/:songId", element: <PlayerPage /> },
   ]);
 }
 
