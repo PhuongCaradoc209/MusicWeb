@@ -12,7 +12,7 @@ import Songs from "./pages/HomePage/SongPage/Songs";
 import Top_50_page from "./pages/HomePage/SongPage/Top_50_page";
 import SongPage from "./pages/HomePage/SongPage/SongPage";
 import { path } from "framer-motion/client";
-import SearchPage from "./pages/SearchPage";
+import SearchPage from "./pages/SearchPage/SearchPage";
 import AlbumPage from "./pages/AlbumPage";
 import { MusicProvider } from "./helpers/MusicProvider";
 

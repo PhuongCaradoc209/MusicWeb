@@ -7,25 +7,15 @@ import MusicContext from "../../helpers/MusicProvider";
 
 const SingleSongPlayer = () => {
     const { songId } = useParams();
-    const [deviceId, setDeviceId] = useState(null);
-    const [accessToken, setAccessToken] = useState(null);
-    const [duration, setDuration] = useState(0);
-    const [prevTrackId, setPrevTrackId] = useState(null);
+    const {
+        track, setTrack,
+        isPlaying, setIsPlaying,
+        player,
+        currentTime, setCurrentTime,
+        accessToken, deviceId
+    } = useContext(MusicContext);
 
-    const { track, setTrack, isPlaying, setIsPlaying, player, setPlayer, currentTime, setCurrentTime} = useContext(MusicContext);
-
-    useEffect(() => {
-        const fetchAccessToken = async () => {
-            try {
-                const res = await axios.get("/api/spotify/token");
-                setAccessToken(res.data.accessToken);
-            } catch (error) {
-                console.error("❌ Lỗi khi lấy access token:", error);
-            }
-        };
-        fetchAccessToken();
-    }, []);
-
+    //GET SONG DETAILS
     useEffect(() => {
         if (!accessToken || !songId) return;
 
@@ -42,116 +32,55 @@ const SingleSongPlayer = () => {
         fetchTrack();
     }, [accessToken, songId]);
 
+    //PLAY SONG
     useEffect(() => {
-        if (!accessToken) return;
-        if (player) return; 
+        if (!player || !accessToken || !deviceId || !track) return;
 
-        const loadSpotifySDK = () => {
-            if (!window.Spotify) {
-                const script = document.createElement("script");
-                script.src = "https://sdk.scdn.co/spotify-player.js";
-                script.async = true;
-                document.body.appendChild(script);
-                script.onload = () => initPlayer();
-            } else {
-                initPlayer();
-            }
-        };
-
-        const initPlayer = () => {
-            if (!window.Spotify) return;
-        
-            const newPlayer = new window.Spotify.Player({
-                name: "Spotify Player",
-                getOAuthToken: (cb) => cb(accessToken),
-                volume: 0.5,
-            });
-        
-            newPlayer.addListener("ready", ({ device_id }) => {
-                setDeviceId(device_id);
-            });
-        
-            newPlayer.addListener("player_state_changed", (state) => {
-                if (!state) return;
-                setIsPlaying(!state.paused);
-                setCurrentTime(state.position);
-                setDuration(state.duration);
-            });
-        
-            newPlayer.connect();
-            setPlayer(newPlayer);
-        };        
-
-        loadSpotifySDK();
-    }, [accessToken]);
-
-    useEffect(() => {
-        if (!deviceId || !accessToken || !songId) return;
-        console.log("🎯 Device ID cập nhật:", deviceId);
-    
-        if (prevTrackId === songId) {
-            console.log("🎵 Bài hát đã phát, không phát lại!");
-            return;
-        }
-
-        const setActiveDevice = async () => {
+        const playTrackIfNew = async () => {
             try {
-                await axios.put(
-                    "https://api.spotify.com/v1/me/player",
-                    { device_ids: [deviceId] },
-                    { headers: { Authorization: `Bearer ${accessToken}` } }
-                );
-                console.log("✅ Đã đặt My Spotify Player làm thiết bị chính!");
+                const state = await player.getCurrentState();
+                const currentTrackUri = state?.track_window?.current_track?.uri;
+                const targetUri = `spotify:track:${track.id}`;
 
-                if(isPlaying) {return;}
-    
-                await axios.put(
-                    `https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`,
-                    { uris: [`spotify:track:${songId}`] },
-                    { headers: { Authorization: `Bearer ${accessToken}` } }
-                );
-                console.log("▶️ Đã phát bài hát!");
+                if (currentTrackUri !== targetUri) {
+                    await axios.put(
+                        "https://api.spotify.com/v1/me/player",
+                        { device_ids: [deviceId], play: true },
+                        { headers: { Authorization: `Bearer ${accessToken}` } }
+                    );
 
-                // Kiểm tra liên tục đến khi phát nhạc rồi tua về 0s
-                const waitForPlayback = setInterval(async () => {
-                    try {
-                        const state = await player.getCurrentState();
-                        if (state && !state.paused) {
-                            clearInterval(waitForPlayback);
-                            await axios.put(
-                                "https://api.spotify.com/v1/me/player/seek?position_ms=0",
-                                {},
-                                { headers: { Authorization: `Bearer ${accessToken}` } }
-                            );
-                            console.log("⏮ Đã tua về 0 giây!");
-                        }
-                    } catch (err) {
-                        console.error("❌ Lỗi khi kiểm tra trạng thái phát nhạc:", err);
-                    }
-                }, 100); 
+                    await axios.put(
+                        `https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`,
+                        { uris: [targetUri] },
+                        { headers: { Authorization: `Bearer ${accessToken}` } }
+                    );
+
+                    console.log("▶️ Đã phát bài hát mới trên player hiện tại");
+                }
             } catch (err) {
-                console.error("❌ Lỗi khi phát bài hát:", err.response?.data || err);
+                console.error("❌ Lỗi khi phát bài hát:", err);
             }
         };
-    
-        setActiveDevice();
-        setPrevTrackId(songId);
-    }, [deviceId, accessToken, songId]);
+
+        playTrackIfNew();
+    }, [track, player, accessToken, deviceId]);   
     
     useEffect(() => {
-        if (prevTrackId === songId) return;
+        // if (prevTrackId === songId) return;
 
         if (!player) return;
     
         const interval = setInterval(async () => {
             const state = await player.getCurrentState();
             if (state) {
-                setCurrentTime(prevTime => {
-                    if (prevTime !== state.position) { // ✅ Chỉ cập nhật nếu giá trị mới khác
-                        return state.position;
-                    }
-                    return prevTime;
-                });
+                // setCurrentTime(prevTime => {
+                //     if (prevTime !== state.position) { // ✅ Chỉ cập nhật nếu giá trị mới khác
+                //         return state.position;
+                //     }
+                //     return prevTime;
+                // });
+                setCurrentTime(state.position);
+                setDuration(state.duration);
             }
         }, 1000);
     
@@ -240,12 +169,12 @@ const SingleSongPlayer = () => {
 
                 <div className="w-full flex justify-between text-sm mb-2">
                     <span>{formatDuration(currentTime)}</span> 
-                    <span>- {formatDuration(track.duration_ms - currentTime)}</span>
+                    <span>- {track?.duration_ms ? formatDuration(track.duration_ms - currentTime) : "00:00"}</span>
                 </div>
                 <input
                     type="range"
                     min={0}
-                    max={duration}
+                    max={track?.duration_ms || 0}
                     value={currentTime}
                     onChange={(e) => player.seek(e.target.value)}
                     className="w-full custom-range cursor-pointer mb-2"
