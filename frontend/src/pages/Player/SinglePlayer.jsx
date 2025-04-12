@@ -126,7 +126,9 @@ const SingleSongPlayer = () => {
                 className="absolute inset-0 bg-black blur-xl
                         after:absolute after:inset-0 after:bg-black after:opacity-30"
                 style={{
-                    backgroundImage: track ? `url(${track.album?.images[0]?.url || ""})` : "",
+                    backgroundImage: track?.album?.images[0]?.url
+                                    ? `url(${track.album.images[0].url})`
+                                    : "none",
                     backgroundSize: "cover",
                     backgroundPosition: "center",
                     backgroundRepeat: "no-repeat",
@@ -142,7 +144,7 @@ const SingleSongPlayer = () => {
                 <div className="relative aspect-square rounded-xl overflow-hidden mb-8 group
                                 shadow-[0_10px_20px_rgba(0,0,0,0.3)]">
                     <img
-                        src={track ? track.album?.images[0]?.url || "" : ""}
+                        src={track?.album?.images[0]?.url || null}
                         className="album-cover"
                     />
                     <div className="absolute top-1/2 -translate-y-1/2 left-0 w-full
