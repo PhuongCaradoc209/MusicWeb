@@ -10,9 +10,20 @@ import togglePlayPause from '../../../utils/togglePlayPause';
 import { formatDuration } from '../../../utils/formatDuration';
 import wave from '../../../assets/items/wave.gif';
 import waveIcon from '../../../assets/items/waveIcon.png';
+import PlaylistList from '../../../components/playlistList';
 
 function Body_right() {
-    const { track, isPlaying, setIsPlaying, player, currentTime, setCurrentTime} = useContext(MusicContext);
+    const {
+        track, setTrack,
+        trackList, setTrackList,
+        currentTrackIndex, setCurrentTrackIndex, 
+        isPlaying, setIsPlaying,
+        playlistId,
+        player,
+        currentTime, setCurrentTime,
+        currentRoutePath
+    } = useContext(MusicContext);
+
     const navigate = useNavigate();
 
     if (!track) return <p className="text-white text-center py-4 flex-4">Không có bài hát nào đang phát</p>;
@@ -33,11 +44,31 @@ function Body_right() {
         return () => clearInterval(interval);
     }, [player]);
 
+    const hasPlaylist = trackList && trackList.length > 1;
+
+    const playNextSong = () => {
+        if (hasPlaylist && currentTrackIndex < trackList.length - 1) {
+            setCurrentTrackIndex(prev => prev + 1);
+        }
+    };
+
+    const playPreviousSong = () => {
+        if (hasPlaylist && currentTrackIndex > 0) {
+            setCurrentTrackIndex(prev => prev - 1);
+            console.log("Previous song:", trackList[currentTrackIndex - 1]);
+        }
+    };
+
+    const handleClick = () => {
+        if (currentRoutePath) {
+            navigate(currentRoutePath);
+        }
+    };
+
     return (
         <div className='py-4 pr-8 col-span-2'>
-            <div className='h-full w-auto pt-2 px-6 gap-y-2 text-white bg-color_0_bold 
+            <div className='h-full w-auto py-2 px-6 gap-y-2 text-white bg-color_0_bold 
                         rounded-xl flex flex-col justify-start items-center overflow-hidden'>
-
                 {/* HEADER */}
                 <div className='flex items-center w-full h-fit gap-x-6 py-4'>
                     {isPlaying ? (
@@ -53,17 +84,21 @@ function Body_right() {
                 <div className='w-full aspect-square object-cover rounded-2xl bg-cover bg-center flex 
                             items-center justify-center overflow-hidden group'
                     style={{ backgroundImage: `url(${track.album?.images[0]?.url || ''})` }}
-                    onClick={() => navigate(`/player/${track.id}`)} >
+                    onClick={handleClick} >
                     <div className='relative flex items-center justify-center w-full h-full bg-black/30
                                 opacity-0 group-hover:opacity-100 transition-opacity duration-300'>
                         <div className='flex items-center justify-between w-[80%] h-10 text-color_4'>
-                            <IoPlaySkipBack size={38} className="transition-transform duration-300 hover:scale-110 cursor-pointer" />
+                            <IoPlaySkipBack 
+                                onClick={(e) => { e.stopPropagation(); playPreviousSong(); }}
+                                size={38} className="transition-transform duration-300 hover:scale-110 cursor-pointer" />
                             {isPlaying ? (
                                 <FaPause size={30} onClick={(e) => { e.stopPropagation(); handleTogglePlayPause(); }} />
                             ) : (
                                 <FaPlay size={30} onClick={(e) => { e.stopPropagation(); handleTogglePlayPause(); }} />
                             )}
-                            <IoPlaySkipForward size={38} className="transition-transform duration-300 hover:scale-110 cursor-pointer" />
+                            <IoPlaySkipForward 
+                                onClick={(e) => { e.stopPropagation(); playNextSong(); }}
+                                size={38} className="transition-transform duration-300 hover:scale-110 cursor-pointer" />
                         </div>
                         {/* ✅ Hiển thị thời lượng bài hát */}
                         <span className='absolute bottom-2 text-base text-white'>
@@ -91,6 +126,21 @@ function Body_right() {
                 </div>
 
                 <hr className="border-t-1 border-gray-400/60 w-full mt-4" />
+
+                <div className="w-full h-36 flex flex-col gap-y-2 overflow-y-auto overflow-x-hidden scrollbar-hidden">
+                    {trackList
+                        .slice(currentTrackIndex + 1, currentTrackIndex + 5)
+                        .map((track, index) => (
+                        <PlaylistList
+                            key={track.id || index}
+                            track={track}
+                            onClick={() => {
+                            // Giống handleSongClick
+                            navigate(`/player/top/50/${country}/playlist/${playlistId}/track/${track.id}`);
+                            }}
+                        />
+                        ))}
+                </div>
             </div>
         </div>
     );
