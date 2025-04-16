@@ -5,7 +5,6 @@ import ScrollableList from "./ScrollableList";
 
 export default function NewReleaseAlbums() {
     const [albums, loading, error] = useFetchNewReleaseAlbums();
-    console.log("Fetched albums:", albums);
 
     return (
         <div className='h-fit rounded-2xl px-4 py-6 bg-color_body space-y-6 text-lg'>
