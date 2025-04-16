@@ -17,9 +17,36 @@ export default {
         color_3: '#232323',
         color_4: '#f2f2f2',
         color_body: '#1f1f1f'
-      }
+      },
+      perspective: {
+        none: 'none',
+        sm: '600px',
+        md: '800px',
+        lg: '1000px',
+        xl: '1500px',
+      },
     },
   },
-  plugins: [],
+  plugins: [
+    function ({ addUtilities }) {
+      addUtilities({
+        '.preserve-3d': {
+          'transform-style': 'preserve-3d',
+        },
+        '.flat': {
+          'transform-style': 'flat',
+        },
+        '.perspective': {
+          perspective: '1000px',
+        },
+        '.backface-hidden': {
+          'backface-visibility': 'hidden',
+        },
+        '.backface-visible': {
+          'backface-visibility': 'visible',
+        },
+      });
+    },
+  ],
 }
 

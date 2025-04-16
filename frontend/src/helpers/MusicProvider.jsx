@@ -1,6 +1,7 @@
 // MusicProvider.jsx
 import { createContext, useState, useEffect } from "react";
 import axios from "axios";
+import useListeningHistory from "../hooks/useListeningHistory";
 
 const MusicContext = createContext();
 
@@ -17,11 +18,19 @@ export const MusicProvider = ({ children }) => {
     const [songId, setSongId] = useState(null);
 
     const [currentRoutePath, setCurrentRoutePath] = useState(null);
+    const { saveListeningHistory } = useListeningHistory();
+
 
     const loadTrackOrPlaylist = (country, playlistIdParam, songIdParam) => {
-        setPlaylistId(playlistIdParam || null);
-        setSongId(songIdParam);
-
+        if (playlistId !== playlistIdParam) {
+            setPlaylistId(playlistIdParam || null);
+        }
+    
+        if (songId !== songIdParam) {
+            console.log("Song ID đã thay đổi:", songIdParam);
+            setSongId(songIdParam);
+        }
+    
         if (!playlistIdParam) {
             setTrackList([]);
         }
@@ -34,6 +43,7 @@ export const MusicProvider = ({ children }) => {
 
     // Get token
     useEffect(() => {
+
         const fetchAccessToken = async () => {
             try {
                 const res = await axios.get("/api/spotify/token");
@@ -144,6 +154,7 @@ export const MusicProvider = ({ children }) => {
                 );
 
                 setTrack(target);
+                await saveListeningHistory(target.id);
             } catch (err) {
                 console.error("❌ Lỗi khi phát bài hát:", err);
             }
@@ -169,6 +180,7 @@ export const MusicProvider = ({ children }) => {
                         { uris: [uri] },
                         { headers: { Authorization: `Bearer ${accessToken}` } }
                     );
+                    await saveListeningHistory(track.id); 
                 } catch (err) {
                     console.error("❌ Lỗi khi phát bài đơn:", err);
                 }
