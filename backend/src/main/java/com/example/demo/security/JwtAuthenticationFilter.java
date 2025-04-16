@@ -69,7 +69,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
                 System.out.println("✅ Debug: Đặt user vào SecurityContextHolder");
             } else {
-                System.out.println("❌ Debug: Token không hợp lệ");
+                System.out.println("❌ Debug: Token không hợp lệ, token: " + token + ", email: " + userDetails.getUsername());
             }
         }
 
