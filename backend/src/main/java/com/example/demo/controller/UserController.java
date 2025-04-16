@@ -1,7 +1,10 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.ListeningHistoryDTO;
 import com.example.demo.dto.UserDTO;
+import com.example.demo.model.ListeningHistory;
 import com.example.demo.model.User;
+import com.example.demo.service.listeningHistory.ListeningHistoryService;
 import com.example.demo.service.user.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,9 +18,11 @@ import java.util.Optional;
 @RequestMapping("/api/users")
 public class UserController {
     private final UserService userService;
+    private final ListeningHistoryService listeningHistoryService;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, ListeningHistoryService listeningHistoryService) {
         this.userService = userService;
+        this.listeningHistoryService = listeningHistoryService;
     }
 
     @GetMapping("/{id}")
@@ -52,5 +57,10 @@ public class UserController {
     @GetMapping
     public ResponseEntity<List<UserDTO>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
+    }
+
+    @GetMapping("/user/{userId}")
+    public List<ListeningHistoryDTO> getUserHistory(@PathVariable Long userId) {
+        return listeningHistoryService.getUserHistoryDTO(userId);
     }
 }
