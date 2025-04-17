@@ -27,5 +27,5 @@ public class ListeningHistory {
     private Song song;
 
     private Timestamp playedAt;
-    private int listenDuration;
+    private long listenDuration;
 }

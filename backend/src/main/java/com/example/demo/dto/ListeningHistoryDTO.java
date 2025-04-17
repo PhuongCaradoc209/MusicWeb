@@ -5,14 +5,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class ListeningHistoryDTO {
-    private Long id;
-    private String spotifyId;
-    private String songTitle;
+    private String spotifyId;     // ✅ để dùng làm id
+    private String title;         // ✅ titleSong
+    private String artist;        // ✅ tên nghệ sĩ
+    private String imageUrl;      // ✅ srcImage
+    private long duration;        // ✅ duration (ms hoặc sec)
     private Timestamp playedAt;
-    private int listenDuration;
 }

@@ -11,11 +11,12 @@ public class ListeningHistoryMapper {
         if (history == null) return null;
 
         return new ListeningHistoryDTO(
-                history.getId(),
                 history.getSong().getSpotifyId(),
                 history.getSong().getTitle(),
-                history.getPlayedAt(),
-                history.getListenDuration()
+                history.getSong().getArtist().getName(),
+                history.getSong().getAlbum().getImageUrl(),
+                history.getSong().getDuration(),
+                history.getPlayedAt()
         );
     }
 

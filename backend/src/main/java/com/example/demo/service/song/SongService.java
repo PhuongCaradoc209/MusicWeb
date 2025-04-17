@@ -108,8 +108,15 @@ public class SongService implements ISongService {
         Map<String, Object> albumData = (Map<String, Object>) trackData.get("album");
         String spotifyAlbumId = albumData.get("id").toString();
         String albumName = albumData.get("name").toString();
-        String imageUrl = albumData.get("img").toString();
-        String artistAl  = albumData.get("artist").toString();
+        List<Map<String, Object>> albumArtists = (List<Map<String, Object>>) albumData.get("artists");
+        String artistAl = null;
+        if (albumArtists != null && !albumArtists.isEmpty()) {
+            Object nameObj = albumArtists.get(0).get("name");
+            if (nameObj != null) {
+                artistAl = nameObj.toString();
+            }
+        }
+        String imageUrl = null;
         List<Map<String, Object>> images = (List<Map<String, Object>>) albumData.get("images");
         if (images != null && !images.isEmpty()) {
             imageUrl = images.get(0).get("url").toString();

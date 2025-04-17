@@ -5,6 +5,6 @@ import com.example.demo.dto.ListeningHistoryDTO;
 import java.util.List;
 
 public interface IListeningHistoryService {
-    List<ListeningHistoryDTO> getUserHistoryDTO(Long userId);
+    List<ListeningHistoryDTO> getUserHistoryDTO();
     void save(ListeningHistoryDTO dto);
 }

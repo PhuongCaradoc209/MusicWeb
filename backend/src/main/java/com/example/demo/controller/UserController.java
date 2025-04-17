@@ -4,10 +4,12 @@ import com.example.demo.dto.ListeningHistoryDTO;
 import com.example.demo.dto.UserDTO;
 import com.example.demo.model.ListeningHistory;
 import com.example.demo.model.User;
+import com.example.demo.repository.UserRepository;
 import com.example.demo.service.listeningHistory.ListeningHistoryService;
 import com.example.demo.service.user.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -59,8 +61,9 @@ public class UserController {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
-    @GetMapping("/user/{userId}")
-    public List<ListeningHistoryDTO> getUserHistory(@PathVariable Long userId) {
-        return listeningHistoryService.getUserHistoryDTO(userId);
+    @GetMapping("/me/listening-history")
+    public ResponseEntity<List<ListeningHistoryDTO>> getUserHistory() {
+        List<ListeningHistoryDTO> history = listeningHistoryService.getUserHistoryDTO();
+        return ResponseEntity.ok(history);
     }
 }
