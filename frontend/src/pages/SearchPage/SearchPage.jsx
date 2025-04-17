@@ -11,10 +11,6 @@ function SearchPage() {
     const navigate = useNavigate();
     const { results, loading } = useFetchSearch_Song(query);
 
-    const handleSongClick = (songId) => {
-        navigate(`/player/${songId}`)
-    }
-
     return (
         <div className="p-6 mt-20 text-white overflow-auto custom-scrollbar h-full flex flex-col">
             {/* <h2 className="text-xl font-bold mb-4">Search Results for "{query}"</h2> */}
@@ -54,7 +50,6 @@ function SearchPage() {
                                 <SongList 
                                     key={track.id} 
                                     id={track.id}
-                                    onClick={handleSongClick}
                                     srcImage={track.album.images[0]?.url}
                                     titleSong={track.name}
                                     artist={track.artists.map(artist => artist.name).join(', ')}
