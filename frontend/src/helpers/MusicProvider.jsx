@@ -1,7 +1,7 @@
 // MusicProvider.jsx
 import { createContext, useState, useEffect } from "react";
 import axios from "axios";
-import useListeningHistory from "../hooks/useListeningHistory";
+import useSaveListeningHistory from "../hooks/useSaveListeningHistory";
 
 const MusicContext = createContext();
 
@@ -18,7 +18,7 @@ export const MusicProvider = ({ children }) => {
     const [songId, setSongId] = useState(null);
 
     const [currentRoutePath, setCurrentRoutePath] = useState(null);
-    const { saveListeningHistory } = useListeningHistory();
+    const { saveListeningHistory } = useSaveListeningHistory();
 
 
     const loadTrackOrPlaylist = (country, playlistIdParam, songIdParam) => {
